@@ -1,0 +1,116 @@
+<!-- ==========================================
+            PATIENT NAVBAR
+========================================== -->
+
+<nav class="top-navbar">
+
+    <!-- Left Section -->
+
+    <div class="navbar-left">
+
+        <button class="menu-toggle">
+
+            <i class="bi bi-list"></i>
+
+        </button>
+
+        <div>
+
+            <h3>Patient Dashboard</h3>
+
+            <p>Welcome back! Manage your appointments and queue status.</p>
+
+        </div>
+
+    </div>
+
+    <!-- Right Section -->
+
+    <div class="navbar-right">
+
+        <!-- Current Date -->
+
+        <div class="current-date">
+
+            <i class="bi bi-calendar-event"></i>
+
+            <span id="currentDate"></span>
+
+        </div>
+
+        <!-- Notification -->
+
+        <div class="notification">
+
+            <a href="/patient/notifications">
+
+                <i class="bi bi-bell-fill"></i>
+
+                <% if (typeof unreadNotifications !== 'undefined' && unreadNotifications > 0) { %>
+
+                    <span class="notification-count">
+
+                        <%= unreadNotifications > 9 ? '9+' : unreadNotifications %>
+
+                    </span>
+
+                <% } %>
+
+            </a>
+
+        </div>
+
+        <!-- Profile (icon + name only -- dropdown removed) -->
+
+        <div class="profile-dropdown" style="cursor:default;">
+
+            <img
+                id="navProfileImage"
+                src="<%= user.profile_image ? user.profile_image : '/images/default-user.png' %>"
+                alt="Patient">
+
+            <div class="profile-info">
+
+                <h6>
+
+                    <%= user.full_name %>
+
+                </h6>
+
+                <span>
+
+                    Patient
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- Date Script -->
+
+<script>
+
+const today = new Date();
+
+const options = {
+
+    weekday: 'long',
+
+    year: 'numeric',
+
+    month: 'long',
+
+    day: 'numeric'
+
+};
+
+document.getElementById("currentDate").innerHTML =
+
+today.toLocaleDateString('en-US', options);
+
+</script>

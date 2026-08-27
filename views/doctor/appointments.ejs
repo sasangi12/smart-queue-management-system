@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Today's Appointments | MediQ</title>
+
+    <!-- Bootstrap CSS -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dashboard CSS (shared theme) -->
+
+    <link rel="stylesheet"
+          href="/css/doctorDashboard.css">
+
+    <!-- Appointments CSS -->
+
+    <link rel="stylesheet"
+          href="/css/doctorAppointments.css">
+
+</head>
+
+<body>
+
+<!-- ===========================================
+        SIDEBAR
+=========================================== -->
+
+<%- include('../partials/doctorSidebar') %>
+
+<!-- ===========================================
+        MAIN CONTENT
+=========================================== -->
+
+<div class="main-content">
+
+    <!-- Navbar -->
+
+    <%- include('../partials/doctorNavbar') %>
+
+    <!-- Page Content -->
+
+    <div class="dashboard-content">
+
+        <div class="section-header">
+
+            <div>
+
+                <h3 class="section-title mb-1">Patient Appointments</h3>
+                <p class="section-subtitle">Your scheduled patients, by date.</p>
+
+            </div>
+
+        </div>
+
+        <% if (errorMsg) { %>
+
+            <div class="booking-alert error" style="padding:16px 20px; border-radius:14px; background:#fee2e2; color:#dc2626; margin-bottom:25px; display:flex; align-items:center; gap:12px;">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span><%= errorMsg %></span>
+            </div>
+
+        <% } %>
+
+        <!-- =====================================
+                Date Navigation
+        ====================================== -->
+
+        <div class="date-nav">
+
+            <a href="/doctor/appointments?date=<%= prevDate %>" class="date-nav-btn" title="Previous Day">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+
+            <input type="date"
+                   id="datePicker"
+                   class="date-nav-input"
+                   value="<%= selectedDate %>">
+
+            <a href="/doctor/appointments?date=<%= nextDate %>" class="date-nav-btn" title="Next Day">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+
+            <a href="/doctor/appointments"
+               class="date-nav-today-btn <%= selectedDate === todayDateString ? 'is-today' : '' %>">
+                <i class="bi bi-calendar-event me-1"></i>
+                <%= selectedDate === todayDateString ? "Today" : "Jump to Today" %>
+            </a>
+
+            <span class="date-nav-label">
+                Showing:
+                <%= new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) %>
+            </span>
+
+        </div>
+
+        <!-- =====================================
+                Filter Tabs
+        ====================================== -->
+
+        <div class="filter-tabs">
+
+            <div class="filter-tab active" data-filter="all">All</div>
+            <div class="filter-tab" data-filter="Waiting">Waiting</div>
+            <div class="filter-tab" data-filter="Serving">Serving</div>
+            <div class="filter-tab" data-filter="Completed">Completed</div>
+            <div class="filter-tab" data-filter="Skipped">Skipped</div>
+            <div class="filter-tab" data-filter="Cancelled">Cancelled</div>
+
+        </div>
+
+        <!-- =====================================
+                Appointments Table
+        ====================================== -->
+
+        <div class="content-card">
+
+            <% if (appointments.length === 0) { %>
+
+                <div class="empty-state">
+
+                    <i class="bi bi-calendar-x"></i>
+                    <h4>No Appointments</h4>
+                    <p>You have no scheduled patients on this date.</p>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="table-responsive">
+
+                    <table class="dashboard-table" id="appointmentsTable">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Queue No</th>
+                                <th>Patient</th>
+                                <th>Clinic</th>
+                                <th>Time</th>
+                                <th>Est. Wait</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <% appointments.forEach(function(apt) { %>
+
+                                <%
+                                    let rowStatus;
+                                    let badgeClass;
+
+                                    if (apt.appointment_status === 'Cancelled') {
+                                        rowStatus = 'Cancelled';
+                                        badgeClass = 'badge-cancelled';
+                                    } else if (apt.queue_status === 'Serving') {
+                                        rowStatus = 'Serving';
+                                        badgeClass = 'badge-confirmed';
+                                    } else if (apt.queue_status === 'Completed') {
+                                        rowStatus = 'Completed';
+                                        badgeClass = 'badge-completed';
+                                    } else if (apt.queue_status === 'Skipped') {
+                                        rowStatus = 'Skipped';
+                                        badgeClass = 'badge-cancelled';
+                                    } else if (apt.queue_status === 'Waiting') {
+                                        rowStatus = 'Waiting';
+                                        badgeClass = 'badge-pending';
+                                    } else {
+                                        rowStatus = 'Not in Queue';
+                                        badgeClass = 'badge-pending';
+                                    }
+                                %>
+
+                                <tr data-status="<%= rowStatus %>">
+
+                                    <td><%= apt.queue_number ? apt.queue_number : '—' %></td>
+
+                                    <td class="patient-contact">
+
+                                        <%= apt.patient_name %>
+
+                                        <% if (apt.priority_type && apt.priority_type !== 'Normal') { %>
+                                            <span class="priority-chip"><%= apt.priority_type %></span>
+                                        <% } %>
+
+                                        <small><i class="bi bi-telephone me-1"></i><%= apt.patient_phone %></small>
+
+                                    </td>
+
+                                    <td><%= apt.clinic_name %></td>
+
+                                    <td><%= apt.start_time %> - <%= apt.end_time %></td>
+
+                                    <td>
+                                        <%= apt.estimated_wait_time ? apt.estimated_wait_time + ' min' : '—' %>
+                                    </td>
+
+                                    <td>
+                                        <span class="badge <%= badgeClass %>"><%= rowStatus %></span>
+                                    </td>
+
+                                </tr>
+
+                            <% }); %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Sidebar Toggle -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const sidebar = document.querySelector(".sidebar");
+
+    if (menuToggle) {
+
+        menuToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("show");
+        });
+
+    }
+
+});
+
+</script>
+
+<!-- Date Picker Navigation + Filter Tabs -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // =============================
+    // Date picker jumps the page
+    // =============================
+
+    const datePicker = document.getElementById("datePicker");
+
+    datePicker.addEventListener("change", function () {
+
+        if (datePicker.value) {
+            window.location.href = "/doctor/appointments?date=" + datePicker.value;
+        }
+
+    });
+
+    // =============================
+    // Filter Tabs
+    // =============================
+
+    const tabs = document.querySelectorAll(".filter-tab");
+    const rows = document.querySelectorAll("#appointmentsTable tbody tr");
+
+    tabs.forEach(function (tab) {
+
+        tab.addEventListener("click", function () {
+
+            tabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            const filter = tab.getAttribute("data-filter");
+
+            rows.forEach(function (row) {
+
+                if (filter === "all" || row.getAttribute("data-status") === filter) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+
+            });
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>

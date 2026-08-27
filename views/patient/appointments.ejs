@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Appointments | MediQ</title>
+
+    <!-- Bootstrap CSS -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dashboard CSS (shared theme) -->
+
+    <link rel="stylesheet"
+          href="/css/patientDashboard.css">
+
+    <!-- Appointments CSS -->
+
+    <link rel="stylesheet"
+          href="/css/appointments.css">
+
+</head>
+
+<body>
+
+<!-- ===========================================
+        SIDEBAR
+=========================================== -->
+
+<%- include('../partials/patientSidebar') %>
+
+<!-- ===========================================
+        MAIN CONTENT
+=========================================== -->
+
+<div class="main-content">
+
+    <!-- Navbar -->
+
+    <%- include('../partials/patientNavbar') %>
+
+    <!-- Page Content -->
+
+    <div class="dashboard-content">
+
+        <div class="section-header">
+
+            <div>
+
+                <h3 class="section-title mb-1">My Appointments</h3>
+                <p class="section-subtitle">View, track, and manage your booked appointments.</p>
+
+            </div>
+
+            <a href="/patient/bookAppointment" class="primary-btn">
+                <i class="bi bi-calendar-plus me-1"></i>
+                Book New Appointment
+            </a>
+
+        </div>
+
+        <!-- =====================================
+                Alerts
+        ====================================== -->
+
+        <% if (successMsg) { %>
+
+            <div class="booking-alert success">
+                <i class="bi bi-check-circle-fill"></i>
+                <span><%= successMsg %></span>
+            </div>
+
+        <% } %>
+
+        <% if (errorMsg) { %>
+
+            <div class="booking-alert error">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span><%= errorMsg %></span>
+            </div>
+
+        <% } %>
+
+        <!-- =====================================
+                Filter Tabs
+        ====================================== -->
+
+        <div class="filter-tabs">
+
+            <div class="filter-tab active" data-filter="all">All</div>
+            <div class="filter-tab" data-filter="Confirmed">Confirmed</div>
+            <div class="filter-tab" data-filter="Pending">Pending</div>
+            <div class="filter-tab" data-filter="Completed">Completed</div>
+            <div class="filter-tab" data-filter="Cancelled">Cancelled</div>
+
+        </div>
+
+        <!-- =====================================
+                Appointments Table
+        ====================================== -->
+
+        <div class="content-card">
+
+            <% if (appointments.length === 0) { %>
+
+                <div class="empty-state">
+
+                    <i class="bi bi-calendar-x"></i>
+                    <h4>No Appointments Yet</h4>
+                    <p>You haven't booked any appointments. Book your first appointment to get started.</p>
+                    <a href="/patient/bookAppointment" class="primary-btn">Book Appointment</a>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="table-responsive">
+
+                    <table class="dashboard-table" id="appointmentsTable">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Doctor</th>
+                                <th>Clinic</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Queue</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <% appointments.forEach(function(apt) { %>
+
+                                <%
+                                    const badgeClass =
+                                        apt.status === "Confirmed" ? "badge-confirmed" :
+                                        apt.status === "Pending" ? "badge-pending" :
+                                        apt.status === "Cancelled" ? "badge-cancelled" :
+                                        "badge-completed";
+
+                                    const dateObj = new Date(apt.appointment_date);
+                                    const todayObj = new Date();
+                                    todayObj.setHours(0,0,0,0);
+
+                                    const canCancel =
+                                        (apt.status === "Confirmed" || apt.status === "Pending") &&
+                                        dateObj >= todayObj;
+                                %>
+
+                                <tr data-status="<%= apt.status %>">
+
+                                    <td>APT-<%= String(apt.appointment_id).padStart(4, '0') %></td>
+
+                                    <td>
+                                        <%= apt.doctor_name %><br>
+                                        <small class="text-muted"><%= apt.specialization || '' %></small>
+                                    </td>
+
+                                    <td><%= apt.clinic_name %></td>
+
+                                    <td><%= dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
+
+                                    <td><%= apt.start_time %> - <%= apt.end_time %></td>
+
+                                    <td>
+
+                                        <% if (apt.queue_number && apt.status !== 'Cancelled') { %>
+
+                                            <span class="queue-pill">
+                                                <i class="bi bi-people-fill"></i>
+                                                <%= apt.queue_number %>
+                                            </span>
+
+                                        <% } else { %>
+
+                                            <span class="no-action">—</span>
+
+                                        <% } %>
+
+                                    </td>
+
+                                    <td>
+                                        <span class="badge <%= badgeClass %>"><%= apt.status %></span>
+                                    </td>
+
+                                    <td>
+
+                                        <% if (canCancel) { %>
+
+                                            <form class="cancelForm"
+                                                  action="/patient/appointments/cancel/<%= apt.appointment_id %>"
+                                                  method="POST">
+
+                                                <button type="button" class="cancel-btn openCancelModal">
+                                                    Cancel
+                                                </button>
+
+                                            </form>
+
+                                        <% } else { %>
+
+                                            <span class="no-action">No action</span>
+
+                                        <% } %>
+
+                                    </td>
+
+                                </tr>
+
+                            <% }); %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================
+        Cancel Confirmation Modal
+====================================== -->
+
+<div class="confirm-overlay" id="confirmOverlay">
+
+    <div class="confirm-box">
+
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <h4>Cancel Appointment?</h4>
+        <p>This will cancel your appointment and release your queue slot. This action cannot be undone.</p>
+
+        <div class="confirm-actions">
+
+            <button type="button" class="btn-keep" id="keepAppointmentBtn">Keep It</button>
+            <button type="button" class="btn-confirm-cancel" id="confirmCancelBtn">Yes, Cancel</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Dashboard JS -->
+
+<script src="/js/patientDashboard.js"></script>
+
+<!-- Sidebar Toggle -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const sidebar = document.querySelector(".sidebar");
+
+    if (menuToggle) {
+
+        menuToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("show");
+        });
+
+    }
+
+});
+
+</script>
+
+<!-- Filter + Cancel Logic -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // =============================
+    // Filter Tabs
+    // =============================
+
+    const tabs = document.querySelectorAll(".filter-tab");
+    const rows = document.querySelectorAll("#appointmentsTable tbody tr");
+
+    tabs.forEach(function (tab) {
+
+        tab.addEventListener("click", function () {
+
+            tabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            const filter = tab.getAttribute("data-filter");
+
+            rows.forEach(function (row) {
+
+                if (filter === "all" || row.getAttribute("data-status") === filter) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+
+            });
+
+        });
+
+    });
+
+    // =============================
+    // Cancel Confirmation Modal
+    // =============================
+
+    const overlay = document.getElementById("confirmOverlay");
+    const keepBtn = document.getElementById("keepAppointmentBtn");
+    const confirmBtn = document.getElementById("confirmCancelBtn");
+
+    let formToSubmit = null;
+
+    document.querySelectorAll(".openCancelModal").forEach(function (btn) {
+
+        btn.addEventListener("click", function () {
+
+            formToSubmit = btn.closest("form");
+            overlay.classList.add("show");
+
+        });
+
+    });
+
+    keepBtn.addEventListener("click", function () {
+
+        formToSubmit = null;
+        overlay.classList.remove("show");
+
+    });
+
+    confirmBtn.addEventListener("click", function () {
+
+        if (formToSubmit) {
+            formToSubmit.submit();
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>

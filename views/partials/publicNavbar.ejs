@@ -1,0 +1,54 @@
+<!-- ===================== NAVBAR ===================== -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <div class="logo-circle">
+                <i class="bi bi-shield-plus"></i>
+            </div>
+
+            <div class="ms-2">
+                <h5 class="mb-0 hospital-name">MediQ</h5>
+                <small class="hospital-subtitle">Mahiyanganaya Base Hospital</small>
+            </div>
+        </a>
+
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                <li class="nav-item">
+                    <a class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>" href="/">Home</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'about' ? 'active' : '' %>" href="/about">About</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/#departments">Departments</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'contact' ? 'active' : '' %>" href="/contact">Contact</a>
+                </li>
+
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-login" href="/login">Login</a>
+                </li>
+
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-register" href="/register">Register</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+</nav>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Queue Status | MediQ</title>
+
+    <!-- Bootstrap CSS -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dashboard CSS (shared theme) -->
+
+    <link rel="stylesheet"
+          href="/css/patientDashboard.css">
+
+    <!-- Queue Status CSS -->
+
+    <link rel="stylesheet"
+          href="/css/queue.css">
+
+</head>
+
+<body>
+
+<!-- ===========================================
+        SIDEBAR
+=========================================== -->
+
+<%- include('../partials/patientSidebar') %>
+
+<!-- ===========================================
+        MAIN CONTENT
+=========================================== -->
+
+<div class="main-content">
+
+    <!-- Navbar -->
+
+    <%- include('../partials/patientNavbar') %>
+
+    <!-- Page Content -->
+
+    <div class="dashboard-content">
+
+        <div class="section-header">
+
+            <div>
+
+                <h3 class="section-title mb-1">Queue Status</h3>
+                <p class="section-subtitle">Track your live position in the queue.</p>
+
+            </div>
+
+            <div class="live-indicator">
+                <span class="live-dot"></span>
+                Live
+            </div>
+
+        </div>
+
+        <% if (errorMsg) { %>
+
+            <div class="booking-alert error" style="padding:16px 20px; border-radius:14px; background:#fee2e2; color:#dc2626; margin-bottom:25px; display:flex; align-items:center; gap:12px;">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span><%= errorMsg %></span>
+            </div>
+
+        <% } %>
+
+        <div id="queueContainer">
+
+            <% if (queueItems.length === 0) { %>
+
+                <div class="content-card">
+
+                    <div class="empty-state">
+
+                        <i class="bi bi-hourglass"></i>
+                        <h4>No Active Queue</h4>
+                        <p>You don't have any active appointments in the queue right now.</p>
+                        <a href="/patient/bookAppointment" class="primary-btn">Book Appointment</a>
+
+                    </div>
+
+                </div>
+
+            <% } else { %>
+
+                <% queueItems.forEach(function(item) { %>
+
+                    <%
+                        const isServing = item.queue_status === 'Serving';
+                        const dateObj = new Date(item.appointment_date);
+                    %>
+
+                    <div class="queue-status-card <%= isServing ? 'serving-now' : '' %>">
+
+                        <div class="queue-status-top">
+
+                            <div class="queue-doctor-info">
+
+                                <h4>
+                                    <%= item.doctor_name %>
+                                    <span class="queue-status-pill <%= item.queue_status %>"><%= item.queue_status %></span>
+                                    <span class="priority-tag <%= item.priority_type %>"><%= item.priority_type %></span>
+                                </h4>
+
+                                <p><%= item.specialization || '' %> &middot; <%= item.clinic_name %></p>
+
+                                <div class="meta-line">
+
+                                    <span><i class="bi bi-calendar-event"></i><%= dateObj.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' }) %></span>
+                                    <span><i class="bi bi-clock"></i><%= item.start_time %> - <%= item.end_time %></span>
+                                    <% if (item.room_no) { %>
+                                        <span><i class="bi bi-door-open"></i>Room <%= item.room_no %></span>
+                                    <% } %>
+
+                                </div>
+
+                            </div>
+
+                            <div class="queue-number-badge">
+
+                                <div class="number"><%= item.queue_number %></div>
+                                <small>Your Number</small>
+
+                            </div>
+
+                        </div>
+
+                        <div class="queue-stats-row">
+
+                            <div class="queue-stat-box">
+                                <h5><%= item.now_serving ? item.now_serving : '—' %></h5>
+                                <span>Now Serving</span>
+                            </div>
+
+                            <div class="queue-stat-box">
+                                <h5><%= item.people_ahead %></h5>
+                                <span>People Ahead</span>
+                            </div>
+
+                            <div class="queue-stat-box">
+                                <h5><%= item.estimated_wait_time %> min</h5>
+                                <span>Est. Wait</span>
+                            </div>
+
+                            <div class="queue-stat-box">
+                                <h5>#<%= item.queue_position %></h5>
+                                <span>Queue Position</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                <% }); %>
+
+                <p class="queue-refresh-note">
+                    <i class="bi bi-arrow-repeat"></i>
+                    This page refreshes automatically every 15 seconds.
+                </p>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Dashboard JS -->
+
+<script src="/js/patientDashboard.js"></script>
+
+<!-- Sidebar Toggle -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const sidebar = document.querySelector(".sidebar");
+
+    if (menuToggle) {
+
+        menuToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("show");
+        });
+
+    }
+
+});
+
+</script>
+
+<!-- Auto-Refresh Logic -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const queueContainer = document.getElementById("queueContainer");
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return "";
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+    function renderQueueCards(items) {
+
+        if (!items || items.length === 0) {
+
+            queueContainer.innerHTML =
+                '<div class="content-card"><div class="empty-state">' +
+                '<i class="bi bi-hourglass"></i>' +
+                '<h4>No Active Queue</h4>' +
+                '<p>You don\'t have any active appointments in the queue right now.</p>' +
+                '<a href="/patient/bookAppointment" class="primary-btn">Book Appointment</a>' +
+                '</div></div>';
+
+            return;
+
+        }
+
+        let html = "";
+
+        items.forEach(function (item) {
+
+            const isServing = item.queue_status === "Serving";
+            const dateObj = new Date(item.appointment_date);
+            const dateStr = dateObj.toLocaleDateString("en-US", { weekday: "short", day: "numeric", month: "short" });
+
+            html += '<div class="queue-status-card ' + (isServing ? "serving-now" : "") + '">';
+
+            html += '<div class="queue-status-top">';
+            html += '<div class="queue-doctor-info">';
+            html += '<h4>' + escapeHtml(item.doctor_name) +
+                     ' <span class="queue-status-pill ' + item.queue_status + '">' + item.queue_status + '</span>' +
+                     ' <span class="priority-tag ' + item.priority_type + '">' + item.priority_type + '</span></h4>';
+            html += '<p>' + escapeHtml(item.specialization || "") + ' &middot; ' + escapeHtml(item.clinic_name) + '</p>';
+            html += '<div class="meta-line">';
+            html += '<span><i class="bi bi-calendar-event"></i>' + dateStr + '</span>';
+            html += '<span><i class="bi bi-clock"></i>' + item.start_time + ' - ' + item.end_time + '</span>';
+            if (item.room_no) {
+                html += '<span><i class="bi bi-door-open"></i>Room ' + escapeHtml(item.room_no) + '</span>';
+            }
+            html += '</div></div>';
+
+            html += '<div class="queue-number-badge"><div class="number">' + item.queue_number + '</div><small>Your Number</small></div>';
+            html += '</div>';
+
+            html += '<div class="queue-stats-row">';
+            html += '<div class="queue-stat-box"><h5>' + (item.now_serving ? item.now_serving : "—") + '</h5><span>Now Serving</span></div>';
+            html += '<div class="queue-stat-box"><h5>' + item.people_ahead + '</h5><span>People Ahead</span></div>';
+            html += '<div class="queue-stat-box"><h5>' + item.estimated_wait_time + ' min</h5><span>Est. Wait</span></div>';
+            html += '<div class="queue-stat-box"><h5>#' + item.queue_position + '</h5><span>Queue Position</span></div>';
+            html += '</div>';
+
+            html += '</div>';
+
+        });
+
+        html += '<p class="queue-refresh-note"><i class="bi bi-arrow-repeat"></i> This page refreshes automatically every 15 seconds.</p>';
+
+        queueContainer.innerHTML = html;
+
+    }
+
+    function refreshQueueStatus() {
+
+        fetch("/patient/getQueueStatus")
+
+            .then((res) => res.json())
+
+            .then((items) => {
+
+                if (items && !items.error) {
+                    renderQueueCards(items);
+                }
+
+            })
+
+            .catch(function () {
+                // Silently keep showing the last known state on a failed poll
+            });
+
+    }
+
+    // Poll every 15 seconds
+    setInterval(refreshQueueStatus, 15000);
+
+});
+
+</script>
+
+</body>
+
+</html>

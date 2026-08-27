@@ -1,0 +1,141 @@
+<!-- ==========================================
+        RECEPTIONIST SIDEBAR
+=========================================== -->
+
+<div class="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+
+        <div class="logo-icon">
+            <i class="bi bi-hospital-fill"></i>
+        </div>
+
+        <div class="logo-text">
+
+            <h4>Smart Queue</h4>
+
+            <span>Management System</span>
+
+        </div>
+
+    </div>
+
+    <!-- Receptionist Profile -->
+
+    <div class="patient-profile">
+
+        <img src="<%= user.profile_image ? user.profile_image : '/images/default-user.png' %>"
+             alt="Receptionist">
+
+        <h5>
+
+            <%= user.full_name %>
+
+        </h5>
+
+        <p>
+
+            Receptionist
+
+        </p>
+
+    </div>
+
+    <!-- Navigation -->
+
+    <ul class="sidebar-menu">
+
+        <li>
+
+            <a href="/receptionist/dashboard" class="<%= currentPage === 'dashboard' ? 'active' : '' %>">
+
+                <i class="bi bi-speedometer2"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/receptionist/registerPatient" class="<%= currentPage === 'registerPatient' ? 'active' : '' %>">
+
+                <i class="bi bi-person-plus"></i>
+
+                <span>Register Patient</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/receptionist/appointments" class="<%= currentPage === 'appointments' ? 'active' : '' %>">
+
+                <i class="bi bi-calendar-check"></i>
+
+                <span>Appointments</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/receptionist/queue" class="<%= currentPage === 'queue' ? 'active' : '' %>">
+
+                <i class="bi bi-people-fill"></i>
+
+                <span>Queue Overview</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/receptionist/notifications" class="<%= currentPage === 'notifications' ? 'active' : '' %>">
+
+                <i class="bi bi-bell-fill"></i>
+
+                <span>Notifications</span>
+
+                <% if (typeof unreadNotifications !== 'undefined' && unreadNotifications > 0) { %>
+                    <span class="notification-count"><%= unreadNotifications > 9 ? '9+' : unreadNotifications %></span>
+                <% } %>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/receptionist/profile" class="<%= currentPage === 'profile' ? 'active' : '' %>">
+
+                <i class="bi bi-person-circle"></i>
+
+                <span>My Profile</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <!-- Logout -->
+
+    <div class="sidebar-footer">
+
+        <a href="/logout">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            Logout
+
+        </a>
+
+    </div>
+
+</div>

@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Appointments | MediQ</title>
+
+    <!-- Bootstrap CSS -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dashboard CSS (shared theme) -->
+
+    <link rel="stylesheet"
+          href="/css/receptionistDashboard.css">
+
+    <!-- Date-nav / filter-tabs (reused from the Doctor module --
+         those class names are generic, not doctor-specific) -->
+
+    <link rel="stylesheet"
+          href="/css/doctorAppointments.css">
+
+    <!-- Clinic / schedule / priority booking-step UI
+         (reused from the Patient module's Book Appointment page) -->
+
+    <link rel="stylesheet"
+          href="/css/bookAppointment.css">
+
+    <!-- Receptionist-specific additions (patient search, etc.) -->
+
+    <link rel="stylesheet"
+          href="/css/receptionistAppointments.css">
+
+</head>
+
+<body>
+
+<!-- ===========================================
+        SIDEBAR
+=========================================== -->
+
+<%- include('../partials/receptionistSidebar') %>
+
+<!-- ===========================================
+        MAIN CONTENT
+=========================================== -->
+
+<div class="main-content">
+
+    <!-- Navbar -->
+
+    <%- include('../partials/receptionistNavbar') %>
+
+    <!-- Page Content -->
+
+    <div class="dashboard-content">
+
+        <div class="section-header">
+
+            <div>
+
+                <h3 class="section-title mb-1">Appointments</h3>
+                <p class="section-subtitle">View bookings across every clinic, or book a new one for a patient.</p>
+
+            </div>
+
+            <button type="button" class="toggle-booking-btn" id="toggleBookingBtn">
+                <i class="bi bi-calendar-plus"></i>
+                New Appointment
+            </button>
+
+        </div>
+
+        <% if (successMsg) { %>
+
+            <div class="booking-alert success" style="padding:16px 20px; border-radius:14px; background:#dcfce7; color:#15803d; margin-bottom:25px; display:flex; align-items:center; gap:12px;">
+                <i class="bi bi-check-circle-fill"></i>
+                <span><%= successMsg %></span>
+            </div>
+
+        <% } %>
+
+        <% if (errorMsg) { %>
+
+            <div class="booking-alert error" style="padding:16px 20px; border-radius:14px; background:#fee2e2; color:#dc2626; margin-bottom:25px; display:flex; align-items:center; gap:12px;">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span><%= errorMsg %></span>
+            </div>
+
+        <% } %>
+
+        <!-- =====================================
+                BOOK NEW APPOINTMENT (hidden by default)
+        ====================================== -->
+
+        <div class="content-card" id="bookingSection" style="display:none;">
+
+            <h3><i class="bi bi-calendar-plus me-2"></i>Book New Appointment</h3>
+
+            <form action="/receptionist/appointments/book" method="POST" id="bookingForm">
+
+                <input type="hidden" name="patient_id" id="selectedPatientId">
+                <input type="hidden" name="schedule_id" id="selectedScheduleId">
+                <input type="hidden" name="priority_type" id="selectedPriority" value="Normal">
+
+                <!-- Step 1: Find Patient -->
+
+                <label class="form-label" style="font-weight:600; margin-bottom:8px; display:block;">
+                    1. Find Patient
+                </label>
+
+                <div class="patient-picker">
+
+                    <input type="text" id="patientSearchInput"
+                           placeholder="Search by patient name, phone, or NIC...">
+
+                    <div class="patient-picker-results" id="patientResults"></div>
+
+                </div>
+
+                <div class="selected-patient-box" id="selectedPatientBox">
+
+                    <div class="p-info">
+                        <strong id="selectedPatientName"></strong>
+                        <span id="selectedPatientMeta"></span>
+                    </div>
+
+                    <span class="change-patient-link" id="changePatientLink">Change</span>
+
+                </div>
+
+                <p class="section-subtitle mb-4">
+                    Can't find the patient? <a href="/receptionist/registerPatient">Register them first</a>, then come back here.
+                </p>
+
+                <!-- Step 2: Select Clinic -->
+
+                <label class="form-label" style="font-weight:600; margin-bottom:8px; display:block;">
+                    2. Select Clinic
+                </label>
+
+                <div class="clinic-select-grid mb-4">
+
+                    <% clinics.forEach(function(clinic) { %>
+
+                        <div class="clinic-select-card"
+                             data-clinic-id="<%= clinic.clinic_id %>"
+                             data-clinic-name="<%= clinic.clinic_name %>">
+
+                            <i class="bi bi-hospital"></i>
+                            <h5><%= clinic.clinic_name %></h5>
+                            <p><%= clinic.description ? clinic.description : 'General consultations' %></p>
+
+                        </div>
+
+                    <% }); %>
+
+                </div>
+
+                <!-- Step 3: Select Session -->
+
+                <div id="scheduleSection" style="display:none;">
+
+                    <label class="form-label" style="font-weight:600; margin-bottom:8px; display:block;">
+                        3. Select Doctor Session <span id="selectedClinicLabel" class="section-subtitle"></span>
+                    </label>
+
+                    <div id="scheduleList" class="mb-4"></div>
+
+                </div>
+
+                <!-- Step 4: Priority + Confirm -->
+
+                <div id="confirmSection" style="display:none;">
+
+                    <label class="form-label" style="font-weight:600; margin-bottom:8px; display:block;">
+                        4. Priority
+                    </label>
+
+                    <div class="priority-grid mb-4">
+
+                        <div class="priority-option selected" data-value="Normal">
+                            <i class="bi bi-person d-block mb-1"></i>Normal
+                        </div>
+
+                        <div class="priority-option" data-value="Elderly">
+                            <i class="bi bi-person-walking d-block mb-1"></i>Elderly
+                        </div>
+
+                        <div class="priority-option" data-value="Pregnant">
+                            <i class="bi bi-person-hearts d-block mb-1"></i>Pregnant
+                        </div>
+
+                        <div class="priority-option" data-value="Disabled">
+                            <i class="bi bi-universal-access d-block mb-1"></i>Disabled
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="primary-btn" style="border:none; cursor:pointer;">
+                        <i class="bi bi-check-circle me-1"></i>Confirm Booking
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- =====================================
+                Date Navigation
+        ====================================== -->
+
+        <div class="date-nav">
+
+            <a href="/receptionist/appointments?date=<%= prevDate %>" class="date-nav-btn" title="Previous Day">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+
+            <input type="date"
+                   id="datePicker"
+                   class="date-nav-input"
+                   value="<%= selectedDate %>">
+
+            <a href="/receptionist/appointments?date=<%= nextDate %>" class="date-nav-btn" title="Next Day">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+
+            <a href="/receptionist/appointments"
+               class="date-nav-today-btn <%= selectedDate === todayDateString ? 'is-today' : '' %>">
+                <i class="bi bi-calendar-event me-1"></i>
+                <%= selectedDate === todayDateString ? "Today" : "Jump to Today" %>
+            </a>
+
+            <span class="date-nav-label">
+                Showing:
+                <%= new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) %>
+            </span>
+
+        </div>
+
+        <!-- =====================================
+                Filter Tabs
+        ====================================== -->
+
+        <div class="filter-tabs">
+
+            <div class="filter-tab active" data-filter="all">All</div>
+            <div class="filter-tab" data-filter="Waiting">Waiting</div>
+            <div class="filter-tab" data-filter="Serving">Serving</div>
+            <div class="filter-tab" data-filter="Completed">Completed</div>
+            <div class="filter-tab" data-filter="Skipped">Skipped</div>
+            <div class="filter-tab" data-filter="Cancelled">Cancelled</div>
+
+        </div>
+
+        <!-- =====================================
+                Appointments Table
+        ====================================== -->
+
+        <div class="content-card">
+
+            <% if (appointments.length === 0) { %>
+
+                <div class="empty-state">
+
+                    <i class="bi bi-calendar-x"></i>
+                    <h4>No Appointments</h4>
+                    <p>No bookings exist across any clinic for this date.</p>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="table-responsive">
+
+                    <table class="dashboard-table" id="appointmentsTable">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Queue No</th>
+                                <th>Patient</th>
+                                <th>Doctor / Clinic</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <% appointments.forEach(function(apt) { %>
+
+                                <%
+                                    let rowStatus;
+                                    let badgeClass;
+
+                                    if (apt.appointment_status === 'Cancelled') {
+                                        rowStatus = 'Cancelled';
+                                        badgeClass = 'badge-cancelled';
+                                    } else if (apt.queue_status === 'Serving') {
+                                        rowStatus = 'Serving';
+                                        badgeClass = 'badge-confirmed';
+                                    } else if (apt.queue_status === 'Completed') {
+                                        rowStatus = 'Completed';
+                                        badgeClass = 'badge-completed';
+                                    } else if (apt.queue_status === 'Skipped') {
+                                        rowStatus = 'Skipped';
+                                        badgeClass = 'badge-cancelled';
+                                    } else if (apt.queue_status === 'Waiting') {
+                                        rowStatus = 'Waiting';
+                                        badgeClass = 'badge-pending';
+                                    } else {
+                                        rowStatus = 'Not in Queue';
+                                        badgeClass = 'badge-pending';
+                                    }
+
+                                    const canCancel = (rowStatus === 'Waiting' || rowStatus === 'Not in Queue');
+                                %>
+
+                                <tr data-status="<%= rowStatus %>">
+
+                                    <td><%= apt.queue_number ? apt.queue_number : '—' %></td>
+
+                                    <td>
+
+                                        <%= apt.patient_name %>
+
+                                        <% if (apt.priority_type && apt.priority_type !== 'Normal') { %>
+                                            <span class="priority-chip"><%= apt.priority_type %></span>
+                                        <% } %>
+
+                                        <small class="doctor-name-chip"><i class="bi bi-telephone me-1"></i><%= apt.patient_phone %></small>
+
+                                    </td>
+
+                                    <td>
+
+                                        <%= apt.doctor_name %>
+                                        <span class="doctor-name-chip"><%= apt.clinic_name %></span>
+
+                                    </td>
+
+                                    <td><%= apt.start_time %> - <%= apt.end_time %></td>
+
+                                    <td>
+                                        <span class="badge <%= badgeClass %>"><%= rowStatus %></span>
+                                    </td>
+
+                                    <td>
+
+                                        <% if (canCancel) { %>
+
+                                            <form action="/receptionist/appointments/cancel/<%= apt.appointment_id %>" method="POST"
+                                                  onsubmit="return confirm('Cancel this appointment?');">
+
+                                                <input type="hidden" name="date" value="<%= selectedDate %>">
+
+                                                <button type="submit" class="cancel-btn">Cancel</button>
+
+                                            </form>
+
+                                        <% } else { %>
+
+                                            <span class="no-action">—</span>
+
+                                        <% } %>
+
+                                    </td>
+
+                                </tr>
+
+                            <% }); %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Sidebar Toggle -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const sidebar = document.querySelector(".sidebar");
+
+    if (menuToggle) {
+
+        menuToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("show");
+        });
+
+    }
+
+});
+
+</script>
+
+<!-- Date Picker + Filter Tabs -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const datePicker = document.getElementById("datePicker");
+
+    datePicker.addEventListener("change", function () {
+
+        if (datePicker.value) {
+            window.location.href = "/receptionist/appointments?date=" + datePicker.value;
+        }
+
+    });
+
+    const tabs = document.querySelectorAll(".filter-tab");
+    const rows = document.querySelectorAll("#appointmentsTable tbody tr");
+
+    tabs.forEach(function (tab) {
+
+        tab.addEventListener("click", function () {
+
+            tabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            const filter = tab.getAttribute("data-filter");
+
+            rows.forEach(function (row) {
+
+                if (filter === "all" || row.getAttribute("data-status") === filter) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+
+            });
+
+        });
+
+    });
+
+});
+
+</script>
+
+<!-- Book New Appointment: Toggle + Patient Search + Clinic/Schedule/Priority -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // =============================
+    // Toggle booking form visibility
+    // =============================
+
+    const toggleBtn = document.getElementById("toggleBookingBtn");
+    const bookingSection = document.getElementById("bookingSection");
+
+    toggleBtn.addEventListener("click", function () {
+
+        const isHidden = bookingSection.style.display === "none";
+        bookingSection.style.display = isHidden ? "block" : "none";
+
+        if (isHidden) {
+            bookingSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+    });
+
+    // =============================
+    // Patient Search (typeahead)
+    // =============================
+
+    const patientSearchInput = document.getElementById("patientSearchInput");
+    const patientResults = document.getElementById("patientResults");
+    const selectedPatientId = document.getElementById("selectedPatientId");
+    const selectedPatientBox = document.getElementById("selectedPatientBox");
+    const selectedPatientName = document.getElementById("selectedPatientName");
+    const selectedPatientMeta = document.getElementById("selectedPatientMeta");
+    const changePatientLink = document.getElementById("changePatientLink");
+
+    let searchTimeout = null;
+
+    patientSearchInput.addEventListener("input", function () {
+
+        clearTimeout(searchTimeout);
+
+        const query = patientSearchInput.value.trim();
+
+        if (query.length < 2) {
+            patientResults.classList.remove("show");
+            patientResults.innerHTML = "";
+            return;
+        }
+
+        searchTimeout = setTimeout(function () {
+
+            fetch("/receptionist/searchPatients?q=" + encodeURIComponent(query))
+
+                .then((res) => res.json())
+
+                .then((patients) => {
+
+                    if (!patients || patients.length === 0) {
+
+                        patientResults.innerHTML = '<div class="patient-picker-empty">No matching patients found.</div>';
+                        patientResults.classList.add("show");
+                        return;
+
+                    }
+
+                    patientResults.innerHTML = "";
+
+                    patients.forEach(function (p) {
+
+                        const item = document.createElement("div");
+                        item.className = "patient-picker-result-item";
+                        item.innerHTML =
+                            '<div class="p-name">' + p.full_name + '</div>' +
+                            '<div class="p-meta">' + p.phone + (p.nic ? ' &middot; ' + p.nic : '') + '</div>';
+
+                        item.addEventListener("click", function () {
+
+                            selectedPatientId.value = p.patient_id;
+                            selectedPatientName.textContent = p.full_name;
+                            selectedPatientMeta.textContent = p.phone + (p.nic ? ' • ' + p.nic : '');
+
+                            selectedPatientBox.classList.add("show");
+                            patientSearchInput.value = "";
+                            patientResults.classList.remove("show");
+                            patientResults.innerHTML = "";
+
+                        });
+
+                        patientResults.appendChild(item);
+
+                    });
+
+                    patientResults.classList.add("show");
+
+                })
+
+                .catch(function () {
+                    patientResults.classList.remove("show");
+                });
+
+        }, 300);
+
+    });
+
+    changePatientLink.addEventListener("click", function () {
+
+        selectedPatientId.value = "";
+        selectedPatientBox.classList.remove("show");
+        patientSearchInput.value = "";
+        patientSearchInput.focus();
+
+    });
+
+    // Close results dropdown when clicking elsewhere
+    document.addEventListener("click", function (e) {
+
+        if (!patientSearchInput.contains(e.target) && !patientResults.contains(e.target)) {
+            patientResults.classList.remove("show");
+        }
+
+    });
+
+    // =============================
+    // Clinic -> Schedule Selection
+    // =============================
+
+    const clinicCards = document.querySelectorAll(".clinic-select-card");
+    const scheduleSection = document.getElementById("scheduleSection");
+    const scheduleList = document.getElementById("scheduleList");
+    const confirmSection = document.getElementById("confirmSection");
+    const selectedScheduleId = document.getElementById("selectedScheduleId");
+    const selectedClinicLabel = document.getElementById("selectedClinicLabel");
+
+    clinicCards.forEach(function (card) {
+
+        card.addEventListener("click", function () {
+
+            clinicCards.forEach((c) => c.classList.remove("selected"));
+            card.classList.add("selected");
+
+            const clinicId = card.getAttribute("data-clinic-id");
+            const clinicName = card.getAttribute("data-clinic-name");
+
+            selectedClinicLabel.textContent = "— " + clinicName;
+
+            selectedScheduleId.value = "";
+            confirmSection.style.display = "none";
+
+            scheduleSection.style.display = "block";
+
+            loadSchedules(clinicId);
+
+        });
+
+    });
+
+    function loadSchedules(clinicId) {
+
+        scheduleList.innerHTML =
+            '<div class="schedule-empty"><i class="bi bi-hourglass-split"></i><p>Loading available sessions...</p></div>';
+
+        fetch("/receptionist/getSchedulesByClinic/" + clinicId)
+
+            .then((res) => res.json())
+
+            .then((schedules) => {
+
+                if (!schedules || schedules.length === 0) {
+
+                    scheduleList.innerHTML =
+                        '<div class="schedule-empty"><i class="bi bi-calendar-x"></i><p>No available sessions for this clinic.</p></div>';
+
+                    return;
+
+                }
+
+                scheduleList.innerHTML = "";
+                scheduleList.className = "";
+                scheduleList.style.display = "grid";
+                scheduleList.style.gridTemplateColumns = "repeat(auto-fill, minmax(260px, 1fr))";
+                scheduleList.style.gap = "20px";
+
+                schedules.forEach(function (s) {
+
+                    const card = document.createElement("div");
+                    card.className = "schedule-card";
+                    card.setAttribute("data-schedule-id", s.schedule_id);
+
+                    const lowSlots = s.slots_left <= 3 ? "low" : "";
+
+                    const dateFormatted = new Date(s.date).toLocaleDateString("en-US", {
+                        weekday: "short",
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric"
+                    });
+
+                    card.innerHTML =
+                        '<input type="radio" name="schedule_radio">' +
+                        '<span class="slots-left ' + lowSlots + '">' + s.slots_left + ' slots left</span>' +
+                        '<h5>' + s.doctor_name + '</h5>' +
+                        '<div class="specialization">' + (s.specialization || 'General') + '</div>' +
+                        '<div class="schedule-meta">' +
+                            '<span><i class="bi bi-calendar-event"></i>' + dateFormatted + '</span>' +
+                            '<span><i class="bi bi-clock"></i>' + s.start_time + ' - ' + s.end_time + '</span>' +
+                            (s.room_no ? '<span><i class="bi bi-door-open"></i>Room ' + s.room_no + '</span>' : '') +
+                        '</div>';
+
+                    card.addEventListener("click", function () {
+
+                        document.querySelectorAll(".schedule-card").forEach((c) => {
+                            c.classList.remove("selected");
+                            c.querySelector('input[type="radio"]').checked = false;
+                        });
+
+                        card.classList.add("selected");
+                        card.querySelector('input[type="radio"]').checked = true;
+
+                        selectedScheduleId.value = s.schedule_id;
+
+                        confirmSection.style.display = "block";
+
+                    });
+
+                    scheduleList.appendChild(card);
+
+                });
+
+            })
+
+            .catch(function () {
+
+                scheduleList.innerHTML =
+                    '<div class="schedule-empty"><i class="bi bi-exclamation-triangle"></i><p>Failed to load sessions. Please try again.</p></div>';
+
+            });
+
+    }
+
+    // =============================
+    // Priority Selection
+    // =============================
+
+    const priorityOptions = document.querySelectorAll(".priority-option");
+    const selectedPriority = document.getElementById("selectedPriority");
+
+    priorityOptions.forEach(function (opt) {
+
+        opt.addEventListener("click", function () {
+
+            priorityOptions.forEach((o) => o.classList.remove("selected"));
+            opt.classList.add("selected");
+
+            selectedPriority.value = opt.getAttribute("data-value");
+
+        });
+
+    });
+
+    // =============================
+    // Prevent submit without patient + schedule selected
+    // =============================
+
+    const bookingForm = document.getElementById("bookingForm");
+
+    bookingForm.addEventListener("submit", function (e) {
+
+        if (!selectedPatientId.value) {
+            e.preventDefault();
+            alert("Please select a patient before booking.");
+            return;
+        }
+
+        if (!selectedScheduleId.value) {
+            e.preventDefault();
+            alert("Please select an available doctor session.");
+            return;
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>

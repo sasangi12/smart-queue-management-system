@@ -1,0 +1,138 @@
+<!-- ==========================================
+        PATIENT SIDEBAR
+=========================================== -->
+
+<div class="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+
+        <div class="logo-icon">
+            <i class="bi bi-hospital-fill"></i>
+        </div>
+
+        <div class="logo-text">
+
+            <h4>MediQ</h4>
+
+            <span>Management System</span>
+
+        </div>
+
+    </div>
+
+    <!-- Patient Profile -->
+
+    <div class="patient-profile">
+
+        <img id="sidebarProfileImage"
+             src="<%= user.profile_image ? user.profile_image : '/images/default-user.png' %>"
+             alt="Patient">
+
+        <h5>
+
+            <%= user.full_name %>
+
+        </h5>
+
+        <p>
+
+            Patient
+
+        </p>
+
+    </div>
+
+    <!-- Navigation -->
+
+    <ul class="sidebar-menu">
+
+        <li>
+
+            <a href="/patient/dashboard" class="<%= currentPage === 'dashboard' ? 'active' : '' %>">
+
+                <i class="bi bi-speedometer2"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/patient/bookAppointment" class="<%= currentPage === 'bookAppointment' ? 'active' : '' %>">
+
+                <i class="bi bi-calendar-plus"></i>
+
+                <span>Book Appointment</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/patient/appointments" class="<%= currentPage === 'appointments' ? 'active' : '' %>">
+
+                <i class="bi bi-calendar-check"></i>
+
+                <span>My Appointments</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/patient/queue" class="<%= currentPage === 'queue' ? 'active' : '' %>">
+
+                <i class="bi bi-people-fill"></i>
+
+                <span>Queue Status</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/patient/notifications" class="<%= currentPage === 'notifications' ? 'active' : '' %>">
+
+                <i class="bi bi-bell-fill"></i>
+
+                <span>Notifications</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/patient/profile" class="<%= currentPage === 'profile' ? 'active' : '' %>">
+
+                <i class="bi bi-person-circle"></i>
+
+                <span>My Profile</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <!-- Logout -->
+
+    <div class="sidebar-footer">
+
+        <a href="/logout">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            Logout
+
+        </a>
+
+    </div>
+
+</div>

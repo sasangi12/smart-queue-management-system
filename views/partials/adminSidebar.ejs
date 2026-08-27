@@ -1,0 +1,165 @@
+<!-- ==========================================
+        ADMIN SIDEBAR
+=========================================== -->
+
+<div class="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+
+        <div class="logo-icon">
+            <i class="bi bi-hospital-fill"></i>
+        </div>
+
+        <div class="logo-text">
+
+            <h4>Smart Queue</h4>
+
+            <span>Management System</span>
+
+        </div>
+
+    </div>
+
+    <!-- Admin Profile -->
+
+    <div class="patient-profile">
+
+        <img src="<%= user.profile_image ? user.profile_image : '/images/default-user.png' %>"
+             alt="Admin">
+
+        <h5>
+
+            <%= user.full_name %>
+
+        </h5>
+
+        <p>
+
+            Administrator
+
+        </p>
+
+    </div>
+
+    <!-- Navigation -->
+
+    <ul class="sidebar-menu">
+
+        <li>
+
+            <a href="/admin/dashboard" class="<%= currentPage === 'dashboard' ? 'active' : '' %>">
+
+                <i class="bi bi-speedometer2"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/manageDoctors" class="<%= currentPage === 'manageDoctors' ? 'active' : '' %>">
+
+                <i class="bi bi-heart-pulse"></i>
+
+                <span>Manage Doctors</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/managePatients" class="<%= currentPage === 'managePatients' ? 'active' : '' %>">
+
+                <i class="bi bi-people"></i>
+
+                <span>Manage Patients</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/manageReceptionists" class="<%= currentPage === 'manageReceptionists' ? 'active' : '' %>">
+
+                <i class="bi bi-person-badge"></i>
+
+                <span>Manage Receptionists</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/manageClinics" class="<%= currentPage === 'manageClinics' ? 'active' : '' %>">
+
+                <i class="bi bi-hospital"></i>
+
+                <span>Manage Clinics</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/notifications" class="<%= currentPage === 'notifications' ? 'active' : '' %>">
+
+                <i class="bi bi-bell-fill"></i>
+
+                <span>Notifications</span>
+
+                <% if (typeof unreadNotifications !== 'undefined' && unreadNotifications > 0) { %>
+                    <span class="notification-count"><%= unreadNotifications > 9 ? '9+' : unreadNotifications %></span>
+                <% } %>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/reports" class="<%= currentPage === 'reports' ? 'active' : '' %>">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                <span>Reports</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/profile" class="<%= currentPage === 'profile' ? 'active' : '' %>">
+
+                <i class="bi bi-person-circle"></i>
+
+                <span>My Profile</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <!-- Logout -->
+
+    <div class="sidebar-footer">
+
+        <a href="/logout">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            Logout
+
+        </a>
+
+    </div>
+
+</div>

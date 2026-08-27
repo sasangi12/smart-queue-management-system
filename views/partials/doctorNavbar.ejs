@@ -1,0 +1,115 @@
+<!-- ==========================================
+            DOCTOR NAVBAR
+========================================== -->
+
+<nav class="top-navbar">
+
+    <!-- Left Section -->
+
+    <div class="navbar-left">
+
+        <button class="menu-toggle">
+
+            <i class="bi bi-list"></i>
+
+        </button>
+
+        <div>
+
+            <h3>Doctor Dashboard</h3>
+
+            <p>Welcome back! Here's your schedule for today.</p>
+
+        </div>
+
+    </div>
+
+    <!-- Right Section -->
+
+    <div class="navbar-right">
+
+        <!-- Current Date -->
+
+        <div class="current-date">
+
+            <i class="bi bi-calendar-event"></i>
+
+            <span id="currentDate"></span>
+
+        </div>
+
+        <!-- Notification -->
+
+        <div class="notification">
+
+            <a href="/doctor/notifications">
+
+                <i class="bi bi-bell-fill"></i>
+
+                <% if (typeof unreadNotifications !== 'undefined' && unreadNotifications > 0) { %>
+
+                    <span class="notification-count">
+
+                        <%= unreadNotifications > 9 ? '9+' : unreadNotifications %>
+
+                    </span>
+
+                <% } %>
+
+            </a>
+
+        </div>
+
+        <!-- Profile (icon + name only -- no dropdown) -->
+
+        <div class="profile-dropdown" style="cursor:default;">
+
+            <img
+                src="<%= user.profile_image ? user.profile_image : '/images/default-user.png' %>"
+                alt="Doctor">
+
+            <div class="profile-info">
+
+                <h6>
+
+                    Dr. <%= user.full_name %>
+
+                </h6>
+
+                <span>
+
+                    Doctor
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- Date Script -->
+
+<script>
+
+const today = new Date();
+
+const options = {
+
+    weekday: 'long',
+
+    year: 'numeric',
+
+    month: 'long',
+
+    day: 'numeric'
+
+};
+
+document.getElementById("currentDate").innerHTML =
+
+today.toLocaleDateString('en-US', options);
+
+</script>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Queue | MediQ</title>
+
+    <!-- Bootstrap CSS -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dashboard CSS (shared theme) -->
+
+    <link rel="stylesheet"
+          href="/css/doctorDashboard.css">
+
+    <!-- Manage Queue CSS -->
+
+    <link rel="stylesheet"
+          href="/css/doctorManageQueue.css">
+
+</head>
+
+<body>
+
+<!-- ===========================================
+        SIDEBAR
+=========================================== -->
+
+<%- include('../partials/doctorSidebar') %>
+
+<!-- ===========================================
+        MAIN CONTENT
+=========================================== -->
+
+<div class="main-content">
+
+    <!-- Navbar -->
+
+    <%- include('../partials/doctorNavbar') %>
+
+    <!-- Page Content -->
+
+    <div class="dashboard-content">
+
+        <div class="section-header">
+
+            <div>
+
+                <h3 class="section-title mb-1">Manage Queue</h3>
+                <p class="section-subtitle">Call, complete, and manage today's patient queue.</p>
+
+            </div>
+
+        </div>
+
+        <% if (errorMsg) { %>
+
+            <div class="booking-alert error" style="padding:16px 20px; border-radius:14px; background:#fee2e2; color:#dc2626; margin-bottom:25px; display:flex; align-items:center; gap:12px;">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span><%= errorMsg %></span>
+            </div>
+
+        <% } %>
+
+        <% if (todaySessions.length === 0) { %>
+
+            <div class="content-card">
+
+                <div class="empty-state">
+
+                    <i class="bi bi-calendar-x"></i>
+                    <h4>No Sessions Today</h4>
+                    <p>You have no clinic sessions scheduled for today, so there's no queue to manage.</p>
+
+                </div>
+
+            </div>
+
+        <% } else { %>
+
+            <!-- =====================================
+                    Session Tabs (only shown if the
+                    doctor has more than one session today)
+            ====================================== -->
+
+            <% if (todaySessions.length > 1) { %>
+
+                <div class="session-tabs">
+
+                    <% todaySessions.forEach(function(s) { %>
+
+                        <a href="/doctor/queue?schedule=<%= s.schedule_id %>"
+                           class="session-tab <%= String(s.schedule_id) === String(selectedSession.schedule_id) ? 'active' : '' %> <%= s.queue_paused === 'Yes' ? 'paused' : '' %>">
+
+                            <div class="session-tab-title"><%= s.clinic_name %></div>
+                            <div class="session-tab-time"><%= s.start_time %> - <%= s.end_time %></div>
+
+                            <div class="session-tab-stats">
+                                <span>Waiting: <%= s.waiting_count %></span>
+                                <span>Now: <%= s.now_serving ? s.now_serving : '—' %></span>
+                            </div>
+
+                            <% if (s.queue_paused === 'Yes') { %>
+                                <div class="paused-flag"><i class="bi bi-pause-circle-fill"></i> Paused</div>
+                            <% } %>
+
+                        </a>
+
+                    <% }); %>
+
+                </div>
+
+            <% } %>
+
+            <% if (successMsg) { %>
+
+                <div class="booking-alert success" style="padding:16px 20px; border-radius:14px; background:#dcfce7; color:#15803d; margin-bottom:25px; display:flex; align-items:center; gap:12px;">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span><%= successMsg %></span>
+                </div>
+
+            <% } %>
+
+            <!-- =====================================
+                    Queue Control Bar
+            ====================================== -->
+
+            <div class="queue-control-bar">
+
+                <h3>
+
+                    <%= selectedSession.clinic_name %> Queue
+                    <span class="clinic-label">&middot; <%= selectedSession.start_time %> - <%= selectedSession.end_time %></span>
+
+                </h3>
+
+                <% if (selectedSession.queue_paused === 'Yes') { %>
+
+                    <form action="/doctor/queue/resume" method="POST">
+                        <input type="hidden" name="schedule_id" value="<%= selectedSession.schedule_id %>">
+                        <button type="submit" class="resume-btn">
+                            <i class="bi bi-play-fill me-1"></i>Resume Queue
+                        </button>
+                    </form>
+
+                <% } else { %>
+
+                    <form action="/doctor/queue/pause" method="POST">
+                        <input type="hidden" name="schedule_id" value="<%= selectedSession.schedule_id %>">
+                        <button type="submit" class="pause-btn">
+                            <i class="bi bi-pause-fill me-1"></i>Pause Queue
+                        </button>
+                    </form>
+
+                <% } %>
+
+            </div>
+
+            <% if (selectedSession.queue_paused === 'Yes') { %>
+
+                <div class="paused-banner">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    This queue is paused. Patients can still be viewed, but no new patient can be called until you resume it.
+                </div>
+
+            <% } %>
+
+            <!-- =====================================
+                    Now Serving Hero Card
+            ====================================== -->
+
+            <% if (currentServing) { %>
+
+                <div class="now-serving-card">
+
+                    <div class="now-serving-top">
+
+                        <div>
+
+                            <div class="now-serving-label">Now Serving</div>
+                            <div class="now-serving-number"><%= currentServing.queue_number %></div>
+                            <div class="now-serving-patient"><%= currentServing.patient_name %></div>
+
+                            <div class="now-serving-meta">
+                                <i class="bi bi-telephone me-1"></i><%= currentServing.patient_phone %>
+                                <% if (currentServing.priority_type && currentServing.priority_type !== 'Normal') { %>
+                                    &nbsp;&middot;&nbsp;<%= currentServing.priority_type %>
+                                <% } %>
+                            </div>
+
+                        </div>
+
+                        <div class="now-serving-actions">
+
+                            <form action="/doctor/queue/complete/<%= currentServing.queue_id %>" method="POST">
+                                <input type="hidden" name="schedule_id" value="<%= selectedSession.schedule_id %>">
+                                <button type="submit" class="serving-action-btn complete-btn">
+                                    <i class="bi bi-check-circle-fill me-1"></i>Mark Completed
+                                </button>
+                            </form>
+
+                            <form action="/doctor/queue/skip/<%= currentServing.queue_id %>" method="POST">
+                                <input type="hidden" name="schedule_id" value="<%= selectedSession.schedule_id %>">
+                                <button type="submit" class="serving-action-btn skip-btn-hero"
+                                        onclick="return confirm('Skip this patient? They will need to be re-booked to rejoin the queue.');">
+                                    <i class="bi bi-skip-forward-fill me-1"></i>Skip
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="now-serving-card empty-serving">
+
+                    <div class="now-serving-top">
+
+                        <div>
+
+                            <div class="now-serving-label" style="color:var(--gray);">Now Serving</div>
+                            <div class="now-serving-patient" style="margin-top:10px;">No patient is currently being served.</div>
+
+                        </div>
+
+                        <form action="/doctor/queue/callNext" method="POST">
+
+                            <input type="hidden" name="schedule_id" value="<%= selectedSession.schedule_id %>">
+
+                            <button type="submit" class="call-next-btn"
+                                    <%= (selectedSession.queue_paused === 'Yes' || !nextWaiting) ? 'disabled' : '' %>>
+                                <i class="bi bi-megaphone-fill"></i>
+                                Call Next Patient
+                                <% if (nextWaiting) { %> (<%= nextWaiting.queue_number %>) <% } %>
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            <% } %>
+
+            <!-- =====================================
+                    Waiting List
+            ====================================== -->
+
+            <%
+                const waitingList = queueList.filter(function(q) { return q.queue_status === 'Waiting'; });
+            %>
+
+            <div class="content-card">
+
+                <h3>Waiting List (<%= waitingList.length %>)</h3>
+
+                <% if (waitingList.length === 0) { %>
+
+                    <div class="empty-state">
+
+                        <i class="bi bi-people"></i>
+                        <h4>No One Waiting</h4>
+                        <p>There are currently no patients waiting in this session's queue.</p>
+
+                    </div>
+
+                <% } else { %>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Position</th>
+                                    <th>Queue No</th>
+                                    <th>Patient</th>
+                                    <th>Phone</th>
+                                    <th>Priority</th>
+                                    <th>Action</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                <% waitingList.forEach(function(q, index) { %>
+
+                                    <tr>
+
+                                        <td><span class="queue-position-badge"><%= index + 1 %></span></td>
+
+                                        <td><%= q.queue_number %></td>
+
+                                        <td><%= q.patient_name %></td>
+
+                                        <td><%= q.patient_phone %></td>
+
+                                        <td>
+
+                                            <% if (q.priority_type && q.priority_type !== 'Normal') { %>
+                                                <span class="priority-chip"><%= q.priority_type %></span>
+                                            <% } else { %>
+                                                <span class="text-muted">—</span>
+                                            <% } %>
+
+                                        </td>
+
+                                        <td>
+
+                                            <form action="/doctor/queue/skip/<%= q.queue_id %>" method="POST">
+                                                <input type="hidden" name="schedule_id" value="<%= selectedSession.schedule_id %>">
+                                                <button type="submit" class="row-skip-btn"
+                                                        onclick="return confirm('Skip this patient?');">
+                                                    Skip
+                                                </button>
+                                            </form>
+
+                                        </td>
+
+                                    </tr>
+
+                                <% }); %>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                <% } %>
+
+            </div>
+
+            <!-- =====================================
+                    Full Session Queue (reference / filterable)
+            ====================================== -->
+
+            <div class="content-card">
+
+                <h3>Full Session Record</h3>
+
+                <div class="filter-tabs">
+
+                    <div class="filter-tab active" data-filter="all">All</div>
+                    <div class="filter-tab" data-filter="Waiting">Waiting</div>
+                    <div class="filter-tab" data-filter="Serving">Serving</div>
+                    <div class="filter-tab" data-filter="Completed">Completed</div>
+                    <div class="filter-tab" data-filter="Skipped">Skipped</div>
+
+                </div>
+
+                <% if (queueList.length === 0) { %>
+
+                    <div class="empty-state">
+
+                        <i class="bi bi-inbox"></i>
+                        <h4>No Bookings Yet</h4>
+                        <p>No patients have booked this session yet.</p>
+
+                    </div>
+
+                <% } else { %>
+
+                    <div class="table-responsive">
+
+                        <table class="dashboard-table" id="fullQueueTable">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Queue No</th>
+                                    <th>Patient</th>
+                                    <th>Priority</th>
+                                    <th>Called At</th>
+                                    <th>Status</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                <% queueList.forEach(function(q) { %>
+
+                                    <%
+                                        const rowStatus = q.queue_status ? q.queue_status : 'Not in Queue';
+
+                                        let badgeClass = 'badge-pending';
+                                        if (rowStatus === 'Serving') badgeClass = 'badge-confirmed';
+                                        else if (rowStatus === 'Completed') badgeClass = 'badge-completed';
+                                        else if (rowStatus === 'Skipped') badgeClass = 'badge-cancelled';
+                                    %>
+
+                                    <tr data-status="<%= rowStatus %>">
+
+                                        <td><%= q.queue_number ? q.queue_number : '—' %></td>
+
+                                        <td><%= q.patient_name %></td>
+
+                                        <td>
+
+                                            <% if (q.priority_type && q.priority_type !== 'Normal') { %>
+                                                <span class="priority-chip"><%= q.priority_type %></span>
+                                            <% } else { %>
+                                                <span class="text-muted">—</span>
+                                            <% } %>
+
+                                        </td>
+
+                                        <td>
+
+                                            <%= q.called_time ? new Date(q.called_time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '—' %>
+
+                                        </td>
+
+                                        <td>
+                                            <span class="badge <%= badgeClass %>"><%= rowStatus %></span>
+                                        </td>
+
+                                    </tr>
+
+                                <% }); %>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                <% } %>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Sidebar Toggle -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const sidebar = document.querySelector(".sidebar");
+
+    if (menuToggle) {
+
+        menuToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("show");
+        });
+
+    }
+
+});
+
+</script>
+
+<!-- Filter Tabs (Full Session Record table) -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const tabs = document.querySelectorAll(".filter-tab");
+    const rows = document.querySelectorAll("#fullQueueTable tbody tr");
+
+    tabs.forEach(function (tab) {
+
+        tab.addEventListener("click", function () {
+
+            tabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            const filter = tab.getAttribute("data-filter");
+
+            rows.forEach(function (row) {
+
+                if (filter === "all" || row.getAttribute("data-status") === filter) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+
+            });
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | MediQ</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Login CSS -->
+    <link rel="stylesheet" href="/css/login.css">
+
+</head>
+
+<body>
+
+<div class="login-page">
+
+    <div class="container">
+
+        <div class="row align-items-center min-vh-100">
+
+            <!-- ==========================================
+                        LEFT SIDE
+            =========================================== -->
+
+            <div class="col-lg-6 d-none d-lg-block">
+
+                <div class="left-content">
+
+                    <span class="badge-title">
+
+                        <i class="bi bi-shield-check"></i>
+
+                        Secure Healthcare Platform
+
+                    </span>
+
+                    <h1>
+
+                        Welcome Back to
+                        <span>MediQ</span>
+
+                    </h1>
+
+                    <p>
+
+                        Login to access appointments,
+                        queue tracking, notifications,
+                        and healthcare services through
+                        our MediQ healthcare management system.
+
+                    </p>
+
+                    <div class="login-illustration">
+
+                        <img src="/images/doctor.svg"
+                            alt="Doctor Illustration">
+
+                    </div>
+
+                    <div class="hospital-features">
+
+                        <div class="feature">
+
+                            <i class="bi bi-calendar-check-fill"></i>
+
+                            <span>Online Appointment Booking</span>
+
+                        </div>
+
+                        <div class="feature">
+
+                            <i class="bi bi-clock-history"></i>
+
+                            <span>Live Queue Tracking</span>
+
+                        </div>
+
+                        <div class="feature">
+
+                            <i class="bi bi-bell-fill"></i>
+
+                            <span>Real-Time Notifications</span>
+
+                        </div>
+
+                        <div class="feature">
+
+                            <i class="bi bi-heart-pulse-fill"></i>
+
+                            <span>Quality Healthcare Services</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ==========================================
+                        RIGHT SIDE
+            =========================================== -->
+
+            <div class="col-lg-6">
+
+                <div class="login-card">
+
+                    <div class="text-center mb-4">
+
+                        <div class="login-icon">
+
+                            <i class="bi bi-person-circle"></i>
+
+                        </div>
+
+                        <h2>Welcome Back</h2>
+
+                        <p>
+
+                            Sign in to continue
+
+                        </p>
+
+                    </div>
+
+                    <form action="/login" method="POST">
+
+                        <!-- Email -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+
+                                Email Address
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="bi bi-envelope-fill"></i>
+
+                                </span>
+
+                                <input
+
+                                    type="email"
+
+                                    name="email"
+
+                                    class="form-control"
+
+                                    placeholder="Enter your email"
+
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Password -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Password
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="bi bi-lock-fill"></i>
+
+                                </span>
+
+                                <input
+
+                                    type="password"
+
+                                    id="password"
+
+                                    name="password"
+
+                                    class="form-control"
+
+                                    placeholder="Enter your password"
+
+                                    required>
+
+                                <button
+
+                                    type="button"
+
+                                    class="btn btn-outline-secondary"
+
+                                    id="togglePassword">
+
+                                    <i class="bi bi-eye"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Remember -->
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+
+                            <div class="form-check">
+
+                                <input
+
+                                    class="form-check-input"
+
+                                    type="checkbox"
+
+                                    id="remember">
+
+                                <label
+
+                                    class="form-check-label"
+
+                                    for="remember">
+
+                                    Remember Me
+
+                                </label>
+
+                            </div>
+
+                            <a href="#" class="forgot-link">
+
+                                Forgot Password?
+
+                            </a>
+
+                        </div>
+
+                        <!-- Login Button -->
+
+                        <button
+
+                            type="submit"
+
+                            class="btn login-btn w-100">
+
+                            <i class="bi bi-box-arrow-in-right"></i>
+
+                            Login
+
+                        </button>
+
+                    </form>
+
+                    <hr>
+
+                    <!-- Register -->
+
+                    <div class="text-center">
+
+                        <p>
+
+                            Don't have an account?
+
+                        </p>
+
+                        <a
+
+                            href="/register"
+
+                            class="register-btn">
+
+                            Create New Account
+
+                        </a>
+
+                    </div>
+
+                    <!-- Home -->
+
+                    <div class="text-center mt-4">
+
+                        <a
+
+                            href="/"
+
+                            class="back-home">
+
+                            <i class="bi bi-arrow-left"></i>
+
+                            Back to Home
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="/js/login.js"></script>
+
+</body>
+
+</html>

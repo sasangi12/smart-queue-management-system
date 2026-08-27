@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Queue Overview | MediQ</title>
+
+    <!-- Bootstrap CSS -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dashboard CSS (shared theme) -->
+
+    <link rel="stylesheet"
+          href="/css/receptionistDashboard.css">
+
+    <!-- Date-nav / filter-tabs (reused from the Doctor module) -->
+
+    <link rel="stylesheet"
+          href="/css/doctorAppointments.css">
+
+    <!-- Queue Overview specific CSS -->
+
+    <link rel="stylesheet"
+          href="/css/receptionistQueueOverview.css">
+
+</head>
+
+<body>
+
+<!-- ===========================================
+        SIDEBAR
+=========================================== -->
+
+<%- include('../partials/receptionistSidebar') %>
+
+<!-- ===========================================
+        MAIN CONTENT
+=========================================== -->
+
+<div class="main-content">
+
+    <!-- Navbar -->
+
+    <%- include('../partials/receptionistNavbar') %>
+
+    <!-- Page Content -->
+
+    <div class="dashboard-content">
+
+        <div class="section-header">
+
+            <div>
+
+                <h3 class="section-title mb-1">Queue Overview</h3>
+                <p class="section-subtitle">Monitor live queue activity across every clinic.</p>
+
+            </div>
+
+        </div>
+
+        <!-- =====================================
+                Patient Lookup
+        ====================================== -->
+
+        <div class="patient-lookup-bar">
+
+            <form action="/receptionist/queue" method="GET">
+
+                <input type="hidden" name="date" value="<%= selectedDate %>">
+
+                <input type="text"
+                       name="patientSearch"
+                       placeholder="Look up a patient's current queue status by name or phone..."
+                       value="<%= patientSearch %>">
+
+                <button type="submit">
+                    <i class="bi bi-search me-1"></i>Look Up
+                </button>
+
+                <% if (patientSearch) { %>
+
+                    <a href="/receptionist/queue?date=<%= selectedDate %>" class="clear-search-link">
+                        Clear
+                    </a>
+
+                <% } %>
+
+            </form>
+
+        </div>
+
+        <% if (patientSearch) { %>
+
+            <div class="content-card">
+
+                <h3>Lookup Results for "<%= patientSearch %>"</h3>
+
+                <% if (lookupResults.length === 0) { %>
+
+                    <div class="empty-state">
+
+                        <i class="bi bi-person-x"></i>
+                        <h4>No Active Queue Found</h4>
+                        <p>No patient matching "<%= patientSearch %>" has an active (Waiting or Serving) queue entry right now.</p>
+
+                    </div>
+
+                <% } else { %>
+
+                    <% lookupResults.forEach(function(r) { %>
+
+                        <div class="lookup-result-card">
+
+                            <div class="lr-patient">
+                                <strong><%= r.patient_name %></strong>
+                                <span><i class="bi bi-telephone me-1"></i><%= r.patient_phone %></span>
+                            </div>
+
+                            <div class="lr-details">
+
+                                <div>
+                                    <span class="doctor-name-chip" style="display:block;"><%= r.doctor_name %> &middot; <%= r.clinic_name %></span>
+                                    <span class="doctor-name-chip">
+                                        <%= new Date(r.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }) %>
+                                        &middot; <%= r.start_time %> - <%= r.end_time %>
+                                    </span>
+                                </div>
+
+                                <span class="badge <%= r.queue_status === 'Serving' ? 'badge-confirmed' : 'badge-pending' %>">
+                                    <%= r.queue_status %>
+                                </span>
+
+                                <div class="lr-queue-number"><%= r.queue_number %></div>
+
+                            </div>
+
+                        </div>
+
+                    <% }); %>
+
+                <% } %>
+
+            </div>
+
+        <% } %>
+
+        <!-- =====================================
+                Date Navigation
+        ====================================== -->
+
+        <div class="date-nav">
+
+            <a href="/receptionist/queue?date=<%= prevDate %>" class="date-nav-btn" title="Previous Day">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+
+            <input type="date"
+                   id="datePicker"
+                   class="date-nav-input"
+                   value="<%= selectedDate %>">
+
+            <a href="/receptionist/queue?date=<%= nextDate %>" class="date-nav-btn" title="Next Day">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+
+            <a href="/receptionist/queue"
+               class="date-nav-today-btn <%= selectedDate === todayDateString ? 'is-today' : '' %>">
+                <i class="bi bi-calendar-event me-1"></i>
+                <%= selectedDate === todayDateString ? "Today" : "Jump to Today" %>
+            </a>
+
+            <span class="date-nav-label">
+                Showing:
+                <%= new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) %>
+            </span>
+
+        </div>
+
+        <!-- =====================================
+                Session Summary Cards
+        ====================================== -->
+
+        <% if (sessions.length === 0) { %>
+
+            <div class="content-card">
+
+                <div class="empty-state">
+
+                    <i class="bi bi-calendar-x"></i>
+                    <h4>No Sessions This Date</h4>
+                    <p>No doctors have clinic sessions scheduled on this date.</p>
+
+                </div>
+
+            </div>
+
+        <% } else { %>
+
+            <div class="session-overview-grid">
+
+                <% sessions.forEach(function(s) { %>
+
+                    <div class="session-overview-card <%= s.queue_paused === 'Yes' ? 'paused' : '' %>">
+
+                        <div class="clinic-name"><%= s.clinic_name %></div>
+                        <div class="doctor-name"><%= s.doctor_name %></div>
+                        <div class="time-range"><%= s.start_time %> - <%= s.end_time %></div>
+
+                        <div class="session-overview-stats">
+
+                            <div class="stat-block">
+                                <h4><%= s.waiting_count %></h4>
+                                <span>Waiting</span>
+                            </div>
+
+                            <div class="stat-block">
+                                <h4><%= s.now_serving ? s.now_serving : '—' %></h4>
+                                <span>Now Serving</span>
+                            </div>
+
+                            <div class="stat-block">
+                                <h4><%= s.total_booked %>/<%= s.max_patients %></h4>
+                                <span>Booked</span>
+                            </div>
+
+                        </div>
+
+                        <% if (s.queue_paused === 'Yes') { %>
+
+                            <div class="session-paused-tag">
+                                <i class="bi bi-pause-circle-fill"></i> Queue Paused
+                            </div>
+
+                        <% } %>
+
+                    </div>
+
+                <% }); %>
+
+            </div>
+
+        <% } %>
+
+        <!-- =====================================
+                Filter Tabs
+        ====================================== -->
+
+        <div class="filter-tabs">
+
+            <div class="filter-tab active" data-filter="all">All</div>
+            <div class="filter-tab" data-filter="Waiting">Waiting</div>
+            <div class="filter-tab" data-filter="Serving">Serving</div>
+            <div class="filter-tab" data-filter="Completed">Completed</div>
+            <div class="filter-tab" data-filter="Skipped">Skipped</div>
+            <div class="filter-tab" data-filter="Cancelled">Cancelled</div>
+
+        </div>
+
+        <!-- =====================================
+                Full Queue Record (read-only)
+        ====================================== -->
+
+        <div class="content-card">
+
+            <h3>Full Queue Record</h3>
+
+            <% if (queueList.length === 0) { %>
+
+                <div class="empty-state">
+
+                    <i class="bi bi-inbox"></i>
+                    <h4>No Bookings</h4>
+                    <p>No patients have booked any session on this date.</p>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="table-responsive">
+
+                    <table class="dashboard-table" id="queueTable">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Queue No</th>
+                                <th>Patient</th>
+                                <th>Doctor / Clinic</th>
+                                <th>Time</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <% queueList.forEach(function(q) { %>
+
+                                <%
+                                    let rowStatus;
+                                    let badgeClass;
+
+                                    if (q.appointment_status === 'Cancelled') {
+                                        rowStatus = 'Cancelled';
+                                        badgeClass = 'badge-cancelled';
+                                    } else if (q.queue_status === 'Serving') {
+                                        rowStatus = 'Serving';
+                                        badgeClass = 'badge-confirmed';
+                                    } else if (q.queue_status === 'Completed') {
+                                        rowStatus = 'Completed';
+                                        badgeClass = 'badge-completed';
+                                    } else if (q.queue_status === 'Skipped') {
+                                        rowStatus = 'Skipped';
+                                        badgeClass = 'badge-cancelled';
+                                    } else if (q.queue_status === 'Waiting') {
+                                        rowStatus = 'Waiting';
+                                        badgeClass = 'badge-pending';
+                                    } else {
+                                        rowStatus = 'Not in Queue';
+                                        badgeClass = 'badge-pending';
+                                    }
+                                %>
+
+                                <tr data-status="<%= rowStatus %>">
+
+                                    <td><%= q.queue_number ? q.queue_number : '—' %></td>
+
+                                    <td>
+
+                                        <%= q.patient_name %>
+                                        <small class="doctor-name-chip"><i class="bi bi-telephone me-1"></i><%= q.patient_phone %></small>
+
+                                    </td>
+
+                                    <td>
+
+                                        <%= q.doctor_name %>
+                                        <span class="doctor-name-chip"><%= q.clinic_name %></span>
+
+                                    </td>
+
+                                    <td><%= q.start_time %> - <%= q.end_time %></td>
+
+                                    <td>
+
+                                        <% if (q.priority_type && q.priority_type !== 'Normal') { %>
+                                            <span class="priority-chip"><%= q.priority_type %></span>
+                                        <% } else { %>
+                                            <span class="text-muted">—</span>
+                                        <% } %>
+
+                                    </td>
+
+                                    <td>
+                                        <span class="badge <%= badgeClass %>"><%= rowStatus %></span>
+                                    </td>
+
+                                </tr>
+
+                            <% }); %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Sidebar Toggle -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const sidebar = document.querySelector(".sidebar");
+
+    if (menuToggle) {
+
+        menuToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("show");
+        });
+
+    }
+
+});
+
+</script>
+
+<!-- Date Picker + Filter Tabs -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const datePicker = document.getElementById("datePicker");
+
+    datePicker.addEventListener("change", function () {
+
+        if (datePicker.value) {
+            window.location.href = "/receptionist/queue?date=" + datePicker.value;
+        }
+
+    });
+
+    const tabs = document.querySelectorAll(".filter-tab");
+    const rows = document.querySelectorAll("#queueTable tbody tr");
+
+    tabs.forEach(function (tab) {
+
+        tab.addEventListener("click", function () {
+
+            tabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            const filter = tab.getAttribute("data-filter");
+
+            rows.forEach(function (row) {
+
+                if (filter === "all" || row.getAttribute("data-status") === filter) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+
+            });
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>

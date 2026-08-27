@@ -1,0 +1,141 @@
+<!-- ==========================================
+        DOCTOR SIDEBAR
+=========================================== -->
+
+<div class="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+
+        <div class="logo-icon">
+            <i class="bi bi-hospital-fill"></i>
+        </div>
+
+        <div class="logo-text">
+
+            <h4>Smart Queue</h4>
+
+            <span>Management System</span>
+
+        </div>
+
+    </div>
+
+    <!-- Doctor Profile -->
+
+    <div class="patient-profile">
+
+        <img src="<%= user.profile_image ? user.profile_image : '/images/default-user.png' %>"
+             alt="Doctor">
+
+        <h5>
+
+            Dr. <%= user.full_name %>
+
+        </h5>
+
+        <p>
+
+            <%= doctor && doctor.specialization ? doctor.specialization : 'Doctor' %>
+
+        </p>
+
+    </div>
+
+    <!-- Navigation -->
+
+    <ul class="sidebar-menu">
+
+        <li>
+
+            <a href="/doctor/dashboard" class="<%= currentPage === 'dashboard' ? 'active' : '' %>">
+
+                <i class="bi bi-speedometer2"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/doctor/appointments" class="<%= currentPage === 'appointments' ? 'active' : '' %>">
+
+                <i class="bi bi-calendar-check"></i>
+
+                <span>Today's Appointments</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/doctor/queue" class="<%= currentPage === 'queue' ? 'active' : '' %>">
+
+                <i class="bi bi-people-fill"></i>
+
+                <span>Manage Queue</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/doctor/notifications" class="<%= currentPage === 'notifications' ? 'active' : '' %>">
+
+                <i class="bi bi-bell-fill"></i>
+
+                <span>Notifications</span>
+
+                <% if (typeof unreadNotifications !== 'undefined' && unreadNotifications > 0) { %>
+                    <span class="notification-count"><%= unreadNotifications > 9 ? '9+' : unreadNotifications %></span>
+                <% } %>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/doctor/patientHistory" class="<%= currentPage === 'patientHistory' ? 'active' : '' %>">
+
+                <i class="bi bi-clock-history"></i>
+
+                <span>Patient History</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/doctor/profile" class="<%= currentPage === 'profile' ? 'active' : '' %>">
+
+                <i class="bi bi-person-circle"></i>
+
+                <span>My Profile</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <!-- Logout -->
+
+    <div class="sidebar-footer">
+
+        <a href="/logout">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            Logout
+
+        </a>
+
+    </div>
+
+</div>

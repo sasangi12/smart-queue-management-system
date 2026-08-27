@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | MediQ</title>
+
+    <!-- Bootstrap CSS -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dashboard CSS -->
+
+    <link rel="stylesheet"
+          href="/css/adminDashboard.css">
+
+</head>
+
+<body>
+
+<!-- ===========================================
+        SIDEBAR
+=========================================== -->
+
+<%- include('../partials/adminSidebar') %>
+
+<!-- ===========================================
+        MAIN CONTENT
+=========================================== -->
+
+<div class="main-content">
+
+    <!-- Navbar -->
+
+    <%- include('../partials/adminNavbar') %>
+
+    <!-- Dashboard Content -->
+
+    <div class="dashboard-content">
+
+        <!-- =====================================
+                Welcome Banner
+        ====================================== -->
+
+        <div class="welcome-banner">
+
+            <div>
+
+                <h2>
+
+                    Welcome Back, <%= user ? user.full_name : "Administrator" %> 👋
+
+                </h2>
+
+                <p>
+
+                    A complete overview of the hospital's staff, patients,
+                    clinics, and appointment activity, all in one place.
+
+                </p>
+
+            </div>
+
+            <div>
+
+                <i class="bi bi-shield-lock"></i>
+
+            </div>
+
+        </div>
+
+        <!-- =====================================
+                Statistics Cards
+        ====================================== -->
+
+        <div class="stats-grid">
+
+            <!-- Total Patients -->
+
+            <div class="stat-card">
+
+                <div class="stat-info">
+
+                    <h4>Total Patients</h4>
+
+                    <h2><%= stats.totalPatients %></h2>
+
+                </div>
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-people-fill"></i>
+
+                </div>
+
+            </div>
+
+            <!-- Total Doctors -->
+
+            <div class="stat-card">
+
+                <div class="stat-info">
+
+                    <h4>Total Doctors</h4>
+
+                    <h2><%= stats.totalDoctors %></h2>
+
+                </div>
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-heart-pulse"></i>
+
+                </div>
+
+            </div>
+
+            <!-- Total Receptionists -->
+
+            <div class="stat-card">
+
+                <div class="stat-info">
+
+                    <h4>Total Receptionists</h4>
+
+                    <h2><%= stats.totalReceptionists %></h2>
+
+                </div>
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-person-badge"></i>
+
+                </div>
+
+            </div>
+
+            <!-- Today's Appointments -->
+
+            <div class="stat-card">
+
+                <div class="stat-info">
+
+                    <h4>Today's Appointments</h4>
+
+                    <h2><%= stats.todayAppointments %></h2>
+
+                </div>
+
+                <div class="stat-icon">
+
+                    <i class="bi bi-calendar-check"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =====================================
+                Quick Actions
+        ====================================== -->
+
+        <div class="quick-actions">
+
+            <div class="section-header">
+
+                <h3>
+
+                    Quick Actions
+
+                </h3>
+
+            </div>
+
+            <div class="action-grid">
+
+                <!-- Manage Doctors -->
+
+                <a href="/admin/manageDoctors"
+
+                   class="action-card">
+
+                    <i class="bi bi-heart-pulse"></i>
+
+                    <h4>
+
+                        Manage Doctors
+
+                    </h4>
+
+                    <p>
+
+                        Add, edit, or remove doctor accounts and schedules.
+
+                    </p>
+
+                </a>
+
+                <!-- Manage Patients -->
+
+                <a href="/admin/managePatients"
+
+                   class="action-card">
+
+                    <i class="bi bi-people"></i>
+
+                    <h4>
+
+                        Manage Patients
+
+                    </h4>
+
+                    <p>
+
+                        View and manage every registered patient.
+
+                    </p>
+
+                </a>
+
+                <!-- Manage Clinics -->
+
+                <a href="/admin/manageClinics"
+
+                   class="action-card">
+
+                    <i class="bi bi-hospital"></i>
+
+                    <h4>
+
+                        Manage Clinics
+
+                    </h4>
+
+                    <p>
+
+                        Add or update hospital departments and clinics.
+
+                    </p>
+
+                </a>
+
+                <!-- Reports -->
+
+                <a href="/admin/reports"
+
+                   class="action-card">
+
+                    <i class="bi bi-bar-chart-fill"></i>
+
+                    <h4>
+
+                        Reports
+
+                    </h4>
+
+                    <p>
+
+                        Generate hospital-wide statistics and reports.
+
+                    </p>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- =====================================
+                Dashboard Bottom Section
+        ====================================== -->
+
+        <div class="row mt-4">
+
+            <!-- =====================================
+                    Recent Registrations
+            ====================================== -->
+
+            <div class="col-lg-7">
+
+                <div class="content-card">
+
+                    <div class="section-header">
+
+                        <h3>
+
+                            Recent Registrations
+
+                        </h3>
+
+                        <a href="/admin/managePatients">
+
+                            View All
+
+                        </a>
+
+                    </div>
+
+                    <% if (recentRegistrations.length === 0) { %>
+
+                        <div class="empty-state">
+
+                            <i class="bi bi-person-x"></i>
+                            <h4>No Registrations Yet</h4>
+                            <p>New accounts will appear here as they're created.</p>
+
+                        </div>
+
+                    <% } else { %>
+
+                        <div class="table-responsive">
+
+                            <table class="dashboard-table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Name</th>
+
+                                        <th>Email</th>
+
+                                        <th>Phone</th>
+
+                                        <th>Role</th>
+
+                                        <th>Joined</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <% recentRegistrations.forEach(function(r) { %>
+
+                                        <tr>
+
+                                            <td><%= r.full_name %></td>
+
+                                            <td><%= r.email %></td>
+
+                                            <td><%= r.phone %></td>
+
+                                            <td>
+                                                <span class="role-badge role-<%= r.role_name %>"><%= r.role_name %></span>
+                                            </td>
+
+                                            <td>
+                                                <%= new Date(r.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                                            </td>
+
+                                        </tr>
+
+                                    <% }); %>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    <% } %>
+
+                </div>
+
+            </div>
+
+            <!-- =====================================
+                    Clinic Activity Today
+            ====================================== -->
+
+            <div class="col-lg-5">
+
+                <div class="content-card">
+
+                    <div class="section-header">
+
+                        <h3>
+
+                            Clinic Activity Today
+
+                        </h3>
+
+                        <span style="color:var(--gray); font-size:13px; font-weight:600;">
+                            <%= stats.totalClinics %> total
+                        </span>
+
+                    </div>
+
+                    <% if (clinicActivity.length === 0) { %>
+
+                        <div class="empty-state">
+
+                            <i class="bi bi-hospital"></i>
+                            <h4>No Clinics Yet</h4>
+                            <p>Clinics will appear here once added.</p>
+
+                        </div>
+
+                    <% } else { %>
+
+                        <% clinicActivity.forEach(function(c) { %>
+
+                            <div class="clinic-activity-item">
+
+                                <div class="clinic-name">
+                                    <i class="bi bi-hospital"></i>
+                                    <%= c.clinic_name %>
+                                </div>
+
+                                <span class="clinic-activity-count <%= c.today_count === 0 ? 'zero' : '' %>">
+                                    <%= c.today_count %> today
+                                </span>
+
+                            </div>
+
+                        <% }); %>
+
+                    <% } %>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =====================================
+                Latest Notifications
+        ====================================== -->
+
+        <div class="row mt-4">
+
+            <div class="col-12">
+
+                <div class="content-card">
+
+                    <div class="section-header">
+
+                        <h3>
+
+                            Latest Notifications
+
+                        </h3>
+
+                        <a href="/admin/notifications">
+
+                            View All
+
+                        </a>
+
+                    </div>
+
+                    <% if (recentNotifications.length === 0) { %>
+
+                        <div class="empty-state">
+
+                            <i class="bi bi-bell-slash"></i>
+                            <h4>No Notifications</h4>
+                            <p>You're all caught up.</p>
+
+                        </div>
+
+                    <% } else { %>
+
+                        <div class="notification-panel">
+
+                            <% recentNotifications.forEach(function(n) { %>
+
+                                <%
+                                    let iconClass = 'bi-bell-fill';
+
+                                    const type = (n.notification_type || '').toLowerCase();
+
+                                    if (type.includes('appointment')) iconClass = 'bi-calendar-check-fill';
+                                    else if (type.includes('queue')) iconClass = 'bi-people-fill';
+                                    else if (type.includes('cancel')) iconClass = 'bi-x-circle-fill';
+
+                                    const sentDate = new Date(n.sent_date);
+                                %>
+
+                                <div class="notification-item">
+
+                                    <div class="notification-icon">
+
+                                        <i class="bi <%= iconClass %>"></i>
+
+                                    </div>
+
+                                    <div class="notification-content">
+
+                                        <h5><%= n.title %></h5>
+
+                                        <p><%= n.message %></p>
+
+                                        <small>
+                                            <%= sentDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' }) %>
+                                            &middot;
+                                            <%= sentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) %>
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            <% }); %>
+
+                        </div>
+
+                    <% } %>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =====================================
+                FOOTER
+        ====================================== -->
+
+        <footer class="dashboard-footer mt-5">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <p>
+
+                        © 2026 MediQ.
+                        All Rights Reserved.
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6 text-end">
+
+                    <p>
+
+                        Developed by
+                        <strong>Sasangi Navodya</strong>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </footer>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Sidebar Toggle -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const sidebar = document.querySelector(".sidebar");
+
+    if (menuToggle) {
+
+        menuToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("show");
+        });
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>
