@@ -4,7 +4,7 @@ A web-based clinic queue and appointment management system built with **Node.js,
 
 ## Repository Name
 
-**Recommended GitHub repository name:** `smart-queue-management-system`
+`smart-queue-management-system`
 
 ## Overview
 
@@ -276,36 +276,6 @@ When an appointment is booked, the system creates a corresponding queue entry. Q
 The patient queue interface calculates current queue information dynamically. For example, the number of people ahead is recalculated from active waiting entries rather than relying only on the value stored at booking time. This allows the displayed queue position to change as patients are completed or skipped.
 
 Doctors can control the queue by calling the next patient, completing a queue entry, skipping a patient, or temporarily pausing/resuming the queue.
-
-## Security Notes
-
-Before publishing this project as a public GitHub repository, review the following carefully:
-
-1. **Do not commit `.env` files containing secrets or credentials.**
-2. **Do not commit `node_modules/`.** Commit `package.json` and `package-lock.json` instead.
-3. The supplied SQL dump contains sample user/contact records. **Remove or anonymize any real personal information before making the SQL file public.**
-4. Avoid committing uploaded profile images or other user-generated/private files unless they are intentionally anonymized demo assets.
-5. Replace hard-coded session secrets with environment variables before production deployment.
-6. Use a non-root database account with an appropriate password for production.
-
-## Development Notes
-
-The project uses Express route modules, controllers, models, EJS views, and middleware to keep the application organized. Database access is handled through a MySQL connection pool.
-
-The project includes role-based authorization so that each user type receives only the functions relevant to their responsibilities.
-
-## Future Improvements
-
-Possible future enhancements include:
-
-- Real-time queue updates using WebSockets or Server-Sent Events.
-- Stronger production session management.
-- Automated testing for controllers, models, and routes.
-- Improved validation and error handling.
-- Audit logging for sensitive administrative actions.
-- Deployment using environment-specific configuration.
-
-## License
 
 This project is currently intended for academic/development use. Add an appropriate open-source license here if you decide to distribute it under one.
 
