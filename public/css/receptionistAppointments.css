@@ -1,0 +1,254 @@
+/* =====================================================
+   RECEPTIONIST: APPOINTMENTS PAGE
+   Extends receptionistDashboard.css. Date-nav and filter-tab
+   styling is REUSED from /css/doctorAppointments.css (those
+   class names are generic, not doctor-specific), and the
+   clinic/schedule/priority booking-step UI is REUSED from
+   /css/bookAppointment.css (also generic). This file only
+   adds what's unique to THIS page: the patient search
+   typeahead and a couple of small helpers.
+===================================================== */
+
+/* ===========================
+   TOGGLE: SHOW/HIDE BOOKING FORM
+=========================== */
+
+.toggle-booking-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:#fff;
+
+    border:none;
+
+    padding:12px 24px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.toggle-booking-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 15px 30px rgba(37,99,235,.25);
+
+}
+
+/* ===========================
+   PATIENT SEARCH (typeahead)
+=========================== */
+
+.patient-picker{
+
+    position:relative;
+
+    margin-bottom:10px;
+
+}
+
+.patient-picker input{
+
+    width:100%;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:14px 18px;
+
+    font-size:14px;
+
+    font-family:'Poppins',sans-serif;
+
+}
+
+.patient-picker input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+.patient-picker-results{
+
+    position:absolute;
+
+    top:100%;
+
+    left:0;
+
+    right:0;
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+
+    margin-top:6px;
+
+    max-height:260px;
+
+    overflow-y:auto;
+
+    z-index:50;
+
+    display:none;
+
+}
+
+.patient-picker-results.show{
+
+    display:block;
+
+}
+
+.patient-picker-result-item{
+
+    padding:14px 18px;
+
+    cursor:pointer;
+
+    border-bottom:1px solid var(--border);
+
+    transition:.15s;
+
+}
+
+.patient-picker-result-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.patient-picker-result-item:hover{
+
+    background:var(--primary-light);
+
+}
+
+.patient-picker-result-item .p-name{
+
+    font-weight:600;
+
+    color:var(--text);
+
+    font-size:14px;
+
+}
+
+.patient-picker-result-item .p-meta{
+
+    font-size:12px;
+
+    color:var(--gray);
+
+    margin-top:2px;
+
+}
+
+.patient-picker-empty{
+
+    padding:16px 18px;
+
+    color:var(--gray);
+
+    font-size:13px;
+
+}
+
+/* ===========================
+   SELECTED PATIENT DISPLAY
+=========================== */
+
+.selected-patient-box{
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    background:var(--primary-light);
+
+    border:2px solid var(--primary);
+
+    border-radius:12px;
+
+    padding:14px 18px;
+
+    margin-bottom:10px;
+
+}
+
+.selected-patient-box.show{
+
+    display:flex;
+
+}
+
+.selected-patient-box .p-info strong{
+
+    display:block;
+
+    color:var(--text);
+
+    font-size:15px;
+
+}
+
+.selected-patient-box .p-info span{
+
+    font-size:12px;
+
+    color:var(--gray);
+
+}
+
+.selected-patient-box .change-patient-link{
+
+    color:var(--primary);
+
+    font-weight:600;
+
+    font-size:13px;
+
+    cursor:pointer;
+
+    text-decoration:underline;
+
+}
+
+/* ===========================
+   DOCTOR COLUMN CHIP (appointments table)
+=========================== */
+
+.doctor-name-chip{
+
+    color:var(--gray);
+
+    font-size:12px;
+
+    display:block;
+
+    margin-top:2px;
+
+}

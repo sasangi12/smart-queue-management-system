@@ -1,0 +1,163 @@
+/* =====================================================
+   ADMIN: MANAGE CLINICS PAGE
+   Extends adminDashboard.css. Form field styling comes
+   from /css/profile.css, and generic table/button classes
+   (.toggle-add-btn, .status-badge, .table-action-btn,
+   .back-to-list-link) are REUSED from
+   /css/adminManageDoctors.css -- none of those class names
+   are doctor-specific. This file only adds the search bar
+   (kept separate since .doctor-search-bar's name IS
+   doctor-specific) and a small "upcoming schedules" notice.
+===================================================== */
+
+/* ===========================
+   SEARCH BAR
+=========================== */
+
+.clinic-search-bar{
+
+    background:#fff;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:25px;
+
+}
+
+.clinic-search-bar form{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.clinic-search-bar input{
+
+    flex:1;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:12px 18px;
+
+    font-size:14px;
+
+    font-family:'Poppins',sans-serif;
+
+}
+
+.clinic-search-bar input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+.clinic-search-bar button{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:12px 26px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.clinic-search-bar button:hover{
+
+    background:var(--primary-dark);
+
+}
+
+/* ===========================
+   CLINIC ICON CELL
+=========================== */
+
+.clinic-icon-cell{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.clinic-icon-cell .clinic-icon{
+
+    width:40px;
+
+    height:40px;
+
+    border-radius:12px;
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:18px;
+
+    flex-shrink:0;
+
+}
+
+/* ===========================
+   UPCOMING SCHEDULES NOTICE (edit page)
+=========================== */
+
+.upcoming-schedules-notice{
+
+    background:#fef3c7;
+
+    color:#b45309;
+
+    padding:14px 18px;
+
+    border-radius:12px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    margin-bottom:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.upcoming-schedules-notice.none{
+
+    background:#f1f5f9;
+
+    color:var(--gray);
+
+}

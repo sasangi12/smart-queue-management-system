@@ -1,0 +1,192 @@
+/* =====================================================
+   MY APPOINTMENTS PAGE
+   Extends patientDashboard.css -- uses the same
+   :root variables (--primary, --border, --shadow, etc.)
+===================================================== */
+
+/* ===========================
+   FILTER TABS
+=========================== */
+
+.filter-tabs{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:25px;
+
+    flex-wrap:wrap;
+
+}
+
+.filter-tab{
+
+    padding:10px 22px;
+
+    border-radius:30px;
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    color:var(--gray);
+
+    font-weight:600;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.filter-tab:hover{
+
+    border-color:#93c5fd;
+
+    color:var(--primary);
+
+}
+
+.filter-tab.active{
+
+    background:var(--primary);
+
+    border-color:var(--primary);
+
+    color:#fff;
+
+}
+
+/* ===========================
+   CANCEL BUTTON
+=========================== */
+
+.cancel-btn{
+
+    background:none;
+
+    border:1px solid #ef4444;
+
+    color:#ef4444;
+
+    padding:7px 14px;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.cancel-btn:hover{
+
+    background:#ef4444;
+
+    color:#fff;
+
+}
+
+.no-action{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+}
+
+/* ===========================
+   QUEUE INFO PILL
+=========================== */
+
+.queue-pill{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+
+    padding:5px 12px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+/* ===========================
+   ALERT (shared style)
+=========================== */
+
+.booking-alert{
+
+    padding:16px 20px;
+
+    border-radius:14px;
+
+    margin-bottom:25px;
+
+    font-weight:500;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.booking-alert.success{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+.booking-alert.error{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+}
+
+/* ===========================
+   "BOOK NEW APPOINTMENT" BUTTON FIX
+   -----------------------------------
+   patientDashboard.css already sets .primary-btn{color:#fff},
+   but on this page it sits inside .section-header next to an
+   <a> Bootstrap sometimes still tints via its own link-color
+   variable depending on load order. Forcing it here guarantees
+   white text at rest, not just on hover.
+=========================== */
+
+a.primary-btn,
+.section-header a.primary-btn{
+
+    color:#ffffff !important;
+
+}
+
+a.primary-btn:hover,
+a.primary-btn:focus,
+a.primary-btn:active{
+
+    color:#ffffff !important;
+
+}

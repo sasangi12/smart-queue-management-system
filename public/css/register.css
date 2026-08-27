@@ -1,0 +1,958 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ===========================
+        RESET
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+    background:linear-gradient(135deg,#eef6ff,#dcecff);
+
+}
+
+/* ===========================
+        VARIABLES
+=========================== */
+
+:root{
+
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --white:#ffffff;
+    --text:#1e293b;
+    --gray:#64748b;
+    --border:#dbe3ef;
+    --shadow:0 25px 60px rgba(0,0,0,.08);
+
+}
+
+/* ===========================
+        PAGE
+=========================== */
+
+.register-page{
+
+    position:relative;
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    overflow:hidden;
+
+    padding:30px 0;
+
+    background:linear-gradient(135deg,#f8fbff,#eaf3ff);
+
+}
+
+/* Background Decoration */
+
+.register-page::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:450px;
+
+    height:450px;
+
+    border-radius:50%;
+
+    background:rgba(37,99,235,.08);
+
+    top:-150px;
+
+    left:-150px;
+
+}
+
+.register-page::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:350px;
+
+    height:350px;
+
+    border-radius:50%;
+
+    background:rgba(59,130,246,.08);
+
+    bottom:-120px;
+
+    right:-120px;
+
+}
+
+/* ===========================
+        LEFT SIDE
+=========================== */
+
+.left-content{
+
+    position:relative;
+
+    z-index:5;
+
+    padding-right:60px;
+
+}
+
+.badge-title{
+
+    display:inline-block;
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+    padding:10px 20px;
+
+    border-radius:50px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.left-content h1{
+
+    margin-top:25px;
+
+    font-size:52px;
+
+    font-weight:800;
+
+    color:#111827;
+
+    line-height:1.3;
+
+}
+
+.left-content h1 span{
+
+    color:#2563eb;
+
+}
+
+.left-content p{
+
+    margin-top:25px;
+
+    color:#64748b;
+
+    font-size:17px;
+
+    line-height:1.8;
+
+}
+
+/* ===========================
+        FEATURES
+=========================== */
+
+.hospital-features{
+
+    margin-top:40px;
+
+}
+
+.feature{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+}
+
+.feature i{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:18px;
+
+}
+
+.feature span{
+
+    font-weight:500;
+
+    color:#1e293b;
+
+}
+
+/* ===========================
+      REGISTER CARD
+=========================== */
+
+.register-card{
+
+    position:relative;
+
+    z-index:10;
+
+    background:rgba(255,255,255,.88);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.5);
+
+    border-radius:25px;
+
+    padding:30px;
+
+    box-shadow:var(--shadow);
+
+    max-width:580px;
+
+    margin:auto;
+
+}
+
+/* ===========================
+      REGISTER ICON
+=========================== */
+
+.register-icon{
+
+    width:70px;
+
+    height:70px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:30px;
+
+    margin-bottom:20px;
+
+}
+
+.register-card h2{
+
+    font-weight:700;
+
+    color:#111827;
+
+}
+
+.register-card p{
+
+    color:#64748b;
+
+}
+
+/* ===========================
+        LABELS
+=========================== */
+
+.form-label{
+
+    font-weight:600;
+
+    color:#1e293b;
+
+    margin-bottom:8px;
+
+}
+
+/* ===========================
+      INPUT GROUP
+=========================== */
+
+.input-group{
+
+    margin-top:5px;
+
+}
+
+.input-group-text{
+
+    background:white;
+
+    color:#2563eb;
+
+    border:1px solid var(--border);
+
+    border-right:none;
+
+    border-radius:12px 0 0 12px;
+
+}
+
+.form-control{
+
+    border:1px solid var(--border);
+
+    border-left:none;
+
+    border-radius:0 12px 12px 0;
+
+    height:45px;
+
+    box-shadow:none;
+
+    font-size:15px;
+
+}
+
+.form-control:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:none;
+
+}
+
+/* ===========================
+        TEXTAREA
+=========================== */
+
+textarea.form-control{
+
+    min-height:75px;
+
+    resize:none;
+
+    border-radius:12px;
+
+    border-left:1px solid var(--border);
+
+    padding:15px;
+
+}
+
+/* ===========================
+        CHECKBOX
+=========================== */
+
+.form-check{
+
+    margin-top:15px;
+
+}
+
+.form-check-input{
+
+    cursor:pointer;
+
+}
+
+.form-check-label{
+
+    color:#64748b;
+
+    cursor:pointer;
+
+}
+
+.form-check-input:checked{
+
+    background:#2563eb;
+
+    border-color:#2563eb;
+
+}
+
+/* ===========================
+      REGISTER BUTTON
+=========================== */
+
+.register-btn{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:white;
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:15px;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.register-btn:hover{
+
+    background:linear-gradient(135deg,#1d4ed8,#2563eb);
+
+    color:white;
+
+    transform:translateY(-3px);
+
+}
+
+/* ===========================
+      LOGIN LINK
+=========================== */
+
+.login-link{
+
+    color:#2563eb;
+
+    font-weight:600;
+
+    text-decoration:none;
+
+}
+
+.login-link:hover{
+
+    text-decoration:underline;
+
+}
+
+/* ===========================
+      BACK HOME
+=========================== */
+
+.back-home{
+
+    color:#64748b;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+}
+
+.back-home:hover{
+
+    color:#2563eb;
+
+}
+
+
+/* ===========================
+      CARD ANIMATION
+=========================== */
+
+.register-card{
+
+    animation:fadeUp .9s ease;
+
+}
+
+.left-content{
+
+    animation:fadeLeft 1s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+        transform:translateY(40px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+@keyframes fadeLeft{
+
+    from{
+
+        opacity:0;
+        transform:translateX(-40px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateX(0);
+
+    }
+
+}
+
+/* ===========================
+      FLOATING BACKGROUND
+=========================== */
+
+.register-page::before{
+
+    animation:floatOne 10s ease-in-out infinite;
+
+}
+
+.register-page::after{
+
+    animation:floatTwo 12s ease-in-out infinite;
+
+}
+
+@keyframes floatOne{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(35px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}
+
+@keyframes floatTwo{
+
+    0%{
+
+        transform:translateX(0);
+
+    }
+
+    50%{
+
+        transform:translateX(-25px);
+
+    }
+
+    100%{
+
+        transform:translateX(0);
+
+    }
+
+}
+
+/* ===========================
+      REGISTER CARD HOVER
+=========================== */
+
+.register-card{
+
+    transition:.4s;
+
+}
+
+.register-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 35px 75px rgba(37,99,235,.18);
+
+}
+
+/* ===========================
+      INPUT EFFECTS
+=========================== */
+
+.form-control{
+
+    transition:.3s;
+
+}
+
+.form-control:hover{
+
+    border-color:#93c5fd;
+
+}
+
+.form-control:focus{
+
+    background:#fff;
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+/* ===========================
+      ICON CHANGE
+=========================== */
+
+.input-group-text{
+
+    transition:.3s;
+
+}
+
+.input-group:focus-within .input-group-text{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+/* ===========================
+      BUTTON EFFECT
+=========================== */
+
+.register-btn{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.register-btn::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:-100%;
+
+    width:100%;
+
+    height:100%;
+
+    background:rgba(255,255,255,.18);
+
+    transform:skewX(-25deg);
+
+    transition:.6s;
+
+}
+
+.register-btn:hover::before{
+
+    left:120%;
+
+}
+
+/* ===========================
+      FEATURE EFFECT
+=========================== */
+
+.feature{
+
+    transition:.3s;
+
+}
+
+.feature:hover{
+
+    transform:translateX(8px);
+
+}
+
+.feature:hover i{
+
+    transform:rotate(10deg);
+
+}
+
+/* ===========================
+      REGISTER ICON
+=========================== */
+
+.register-icon{
+
+    animation:pulse 3s infinite;
+
+}
+
+@keyframes pulse{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.08);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}
+
+/* ===========================
+      LOGIN LINK
+=========================== */
+
+.login-link{
+
+    transition:.3s;
+
+}
+
+.login-link:hover{
+
+    color:#1d4ed8;
+
+    letter-spacing:.4px;
+
+}
+
+/* ===========================
+      BACK HOME
+=========================== */
+
+.back-home{
+
+    font-weight:500;
+
+}
+
+.back-home i{
+
+    transition:.3s;
+
+}
+
+.back-home:hover i{
+
+    transform:translateX(-6px);
+
+}
+
+/* ===========================
+      CUSTOM SCROLLBAR
+=========================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#edf4ff;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#2563eb;
+
+    border-radius:30px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#1d4ed8;
+
+}
+
+/* ===========================
+      RESPONSIVE
+=========================== */
+
+@media(max-width:991px){
+
+    .register-page{
+
+        padding:60px 20px;
+
+    }
+
+    .register-card{
+
+        padding:35px;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .register-card{
+
+        padding:30px 25px;
+
+        border-radius:20px;
+
+    }
+
+    .register-icon{
+
+        width:75px;
+
+        height:75px;
+
+        font-size:34px;
+
+    }
+
+    .register-card h2{
+
+        font-size:28px;
+
+    }
+
+    .form-control{
+
+        height:50px;
+
+    }
+
+    textarea.form-control{
+
+        min-height:100px;
+
+    }
+
+    .register-btn{
+
+        padding:14px;
+
+    }
+
+}
+
+@media(max-width:576px){
+
+    .register-page{
+
+        padding:20px 15px;
+
+    }
+
+    .register-card{
+
+        padding:25px 20px;
+
+    }
+
+    .register-card h2{
+
+        font-size:24px;
+
+    }
+
+    .register-card p{
+
+        font-size:14px;
+
+    }
+
+    .form-label{
+
+        font-size:14px;
+
+    }
+
+    .form-check-label{
+
+        font-size:13px;
+
+    }
+
+}
+
+.login-illustration img{
+
+    width:60%;
+    max-width:220px;
+    margin:auto;
+    display:block;
+
+}
+
+.form-select{
+
+    border-left:none;
+
+    border-radius:0 12px 12px 0;
+
+    height:55px;
+
+    border:1px solid var(--border);
+
+    box-shadow:none;
+
+    font-size:15px;
+
+}
+
+.form-select:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}

@@ -1,0 +1,318 @@
+/* =====================================================
+   RECEPTIONIST: QUEUE OVERVIEW PAGE
+   Extends receptionistDashboard.css. Date-nav and filter-
+   tab styling is REUSED from /css/doctorAppointments.css
+   (generic class names, not doctor-specific). This file
+   only adds what's unique here: the session summary cards
+   and the patient lookup box.
+===================================================== */
+
+/* ===========================
+   SESSION SUMMARY CARDS
+=========================== */
+
+.session-overview-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+}
+
+.session-overview-card{
+
+    background:#fff;
+
+    border-radius:16px;
+
+    padding:22px;
+
+    box-shadow:var(--shadow);
+
+    border-left:5px solid var(--primary);
+
+    transition:.25s;
+
+}
+
+.session-overview-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.session-overview-card.paused{
+
+    border-left-color:#f59e0b;
+
+}
+
+.session-overview-card .clinic-name{
+
+    font-weight:700;
+
+    color:var(--text);
+
+    font-size:15px;
+
+}
+
+.session-overview-card .doctor-name{
+
+    color:var(--gray);
+
+    font-size:13px;
+
+    margin-top:2px;
+
+}
+
+.session-overview-card .time-range{
+
+    color:var(--gray);
+
+    font-size:12px;
+
+    margin-top:6px;
+
+}
+
+.session-overview-stats{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:15px;
+
+    padding-top:15px;
+
+    border-top:1px solid var(--border);
+
+}
+
+.session-overview-stats .stat-block{
+
+    text-align:center;
+
+}
+
+.session-overview-stats .stat-block h4{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+    margin:0;
+
+}
+
+.session-overview-stats .stat-block span{
+
+    font-size:11px;
+
+    color:var(--gray);
+
+    text-transform:uppercase;
+
+    letter-spacing:.5px;
+
+    font-weight:600;
+
+}
+
+.session-paused-tag{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    color:#b45309;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    margin-top:10px;
+
+}
+
+/* ===========================
+   PATIENT LOOKUP
+=========================== */
+
+.patient-lookup-bar{
+
+    background:#fff;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:25px;
+
+}
+
+.patient-lookup-bar form{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.patient-lookup-bar input{
+
+    flex:1;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:12px 18px;
+
+    font-size:14px;
+
+    font-family:'Poppins',sans-serif;
+
+}
+
+.patient-lookup-bar input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+.patient-lookup-bar button{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:12px 26px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.patient-lookup-bar button:hover{
+
+    background:var(--primary-dark);
+
+}
+
+.clear-search-link{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    color:var(--gray);
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    padding:12px 16px;
+
+    border-radius:12px;
+
+    border:1px solid var(--border);
+
+    transition:.2s;
+
+}
+
+.clear-search-link:hover{
+
+    color:var(--primary);
+
+    border-color:var(--primary);
+
+}
+
+.lookup-result-card{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#f8fafc;
+
+    border-radius:14px;
+
+    padding:16px 20px;
+
+    margin-bottom:12px;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+
+}
+
+.lookup-result-card .lr-patient strong{
+
+    display:block;
+
+    color:var(--text);
+
+    font-size:15px;
+
+}
+
+.lookup-result-card .lr-patient span{
+
+    color:var(--gray);
+
+    font-size:12px;
+
+}
+
+.lookup-result-card .lr-details{
+
+    display:flex;
+
+    gap:20px;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+}
+
+.lookup-result-card .lr-queue-number{
+
+    font-size:22px;
+
+    font-weight:800;
+
+    color:var(--primary);
+
+}

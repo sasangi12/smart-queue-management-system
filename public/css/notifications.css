@@ -1,0 +1,92 @@
+/* =====================================================
+   NOTIFICATIONS PAGE
+   Extends patientDashboard.css -- uses the same
+   :root variables and .notification-item/.notification-icon
+===================================================== */
+
+.notification-item.unread{
+
+    background:var(--primary-light);
+
+    border-left:4px solid var(--primary);
+
+}
+
+.notification-item{
+
+    position:relative;
+
+    align-items:flex-start;
+
+}
+
+.unread-dot{
+
+    position:absolute;
+
+    top:18px;
+
+    right:18px;
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:var(--primary);
+
+}
+
+.notification-actions{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:10px;
+
+}
+
+.notif-action-btn{
+
+    background:none;
+
+    border:1px solid var(--border);
+
+    color:var(--gray);
+
+    padding:6px 14px;
+
+    border-radius:8px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.notif-action-btn:hover{
+
+    border-color:var(--primary);
+
+    color:var(--primary);
+
+}
+
+.notif-action-btn.delete-btn:hover{
+
+    border-color:#ef4444;
+
+    color:#ef4444;
+
+}
+
+.notif-type-icon.appointment{ color:#2563eb; }
+.notif-type-icon.queue{ color:#f59e0b; }
+.notif-type-icon.cancellation{ color:#ef4444; }
+.notif-type-icon.system{ color:#64748b; }

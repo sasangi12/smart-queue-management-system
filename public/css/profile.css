@@ -1,0 +1,333 @@
+/* =====================================================
+   PROFILE PAGE
+   Extends patientDashboard.css -- uses the same
+   :root variables (--primary, --border, --shadow, etc.)
+===================================================== */
+
+.profile-header-card{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    border-radius:20px;
+
+    padding:35px;
+
+    color:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+
+    margin-bottom:15px;
+
+    box-shadow:0 15px 35px rgba(37,99,235,.25);
+
+    flex-wrap:wrap;
+
+}
+
+/* ===========================
+   AVATAR + EDIT/DELETE
+=========================== */
+
+.profile-avatar-wrap{
+
+    position:relative;
+
+    width:90px;
+
+    height:90px;
+
+    flex-shrink:0;
+
+}
+
+.profile-avatar-wrap img{
+
+    width:90px;
+
+    height:90px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:3px solid rgba(255,255,255,.4);
+
+    background:rgba(255,255,255,.2);
+
+}
+
+.avatar-edit-btn{
+
+    position:absolute;
+
+    bottom:-2px;
+
+    right:-2px;
+
+    width:32px;
+
+    height:32px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    color:var(--primary);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    border:2px solid var(--primary-light);
+
+    transition:.2s;
+
+}
+
+.avatar-edit-btn:hover{
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+
+.profile-header-info h3{
+
+    margin:0;
+
+    font-weight:700;
+
+}
+
+.profile-header-info p{
+
+    margin:6px 0 0;
+
+    opacity:.9;
+
+    font-size:14px;
+
+}
+
+.avatar-actions{
+
+    margin-top:10px;
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.avatar-remove-btn{
+
+    background:rgba(255,255,255,.15);
+
+    border:1px solid rgba(255,255,255,.4);
+
+    color:#fff;
+
+    padding:6px 14px;
+
+    border-radius:8px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.avatar-remove-btn:hover{
+
+    background:#ef4444;
+
+    border-color:#ef4444;
+
+}
+
+.avatar-hint{
+
+    font-size:12px;
+
+    opacity:.8;
+
+    margin-top:8px;
+
+}
+
+/* ===========================
+   FORM STYLING
+=========================== */
+
+.profile-form .form-label{
+
+    font-weight:600;
+
+    color:var(--text);
+
+    font-size:14px;
+
+    margin-bottom:6px;
+
+}
+
+.profile-form .input-group-text{
+
+    background:#f8fafc;
+
+    border:1px solid var(--border);
+
+    border-right:none;
+
+    color:var(--primary);
+
+    border-radius:12px 0 0 12px;
+
+}
+
+.profile-form .form-control,
+.profile-form .form-select{
+
+    border:1px solid var(--border);
+
+    border-left:none;
+
+    border-radius:0 12px 12px 0;
+
+    height:50px;
+
+    box-shadow:none;
+
+    font-size:14px;
+
+}
+
+.profile-form textarea.form-control{
+
+    height:auto;
+
+    border-left:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:12px 15px;
+
+}
+
+.profile-form .form-control:focus,
+.profile-form .form-select:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+.profile-form .input-group:focus-within .input-group-text{
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+
+.profile-save-btn{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:#fff;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:14px 30px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.profile-save-btn:hover{
+
+    transform:translateY(-2px);
+
+    color:#fff;
+
+    box-shadow:0 15px 30px rgba(37,99,235,.25);
+
+}
+
+/* ===========================
+   TABS
+=========================== */
+
+.profile-tabs{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:25px;
+
+}
+
+.profile-tab-btn{
+
+    padding:12px 26px;
+
+    border-radius:12px;
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    color:var(--gray);
+
+    font-weight:600;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.profile-tab-btn.active{
+
+    background:var(--primary);
+
+    border-color:var(--primary);
+
+    color:#fff;
+
+}
+
+.profile-tab-panel{
+
+    display:none;
+
+}
+
+.profile-tab-panel.active{
+
+    display:block;
+
+}

@@ -1,0 +1,360 @@
+/* =====================================================
+   ADMIN: MANAGE DOCTORS PAGE
+   Extends adminDashboard.css. Form field styling comes
+   from /css/profile.css (already generic, reused directly).
+   This file only adds what's unique to this page.
+===================================================== */
+
+/* ===========================
+   TOGGLE ADD-DOCTOR FORM
+=========================== */
+
+.toggle-add-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:#fff;
+
+    border:none;
+
+    padding:12px 24px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.toggle-add-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 15px 30px rgba(37,99,235,.25);
+
+}
+
+/* ===========================
+   GENERATE PASSWORD BUTTON
+=========================== */
+
+.generate-password-btn{
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+
+    border:1px solid var(--border);
+
+    padding:8px 16px;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    margin-top:8px;
+
+}
+
+.generate-password-btn:hover{
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+
+/* ===========================
+   SEARCH BAR
+=========================== */
+
+.doctor-search-bar{
+
+    background:#fff;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:25px;
+
+}
+
+.doctor-search-bar form{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.doctor-search-bar input{
+
+    flex:1;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:12px 18px;
+
+    font-size:14px;
+
+    font-family:'Poppins',sans-serif;
+
+}
+
+.doctor-search-bar input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+.doctor-search-bar button{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:12px 26px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.doctor-search-bar button:hover{
+
+    background:var(--primary-dark);
+
+}
+
+.clear-search-link{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    color:var(--gray);
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    padding:12px 16px;
+
+    border-radius:12px;
+
+    border:1px solid var(--border);
+
+    transition:.2s;
+
+}
+
+.clear-search-link:hover{
+
+    color:var(--primary);
+
+    border-color:var(--primary);
+
+}
+
+/* ===========================
+   DOCTOR TABLE HELPERS
+=========================== */
+
+.doctor-photo-cell{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.doctor-photo-cell img{
+
+    width:40px;
+
+    height:40px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    background:var(--primary-light);
+
+}
+
+.status-badge{
+
+    display:inline-block;
+
+    padding:6px 16px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+.status-badge.Active{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+.status-badge.Inactive{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+}
+
+.table-action-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:7px 14px;
+
+    border-radius:8px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    text-decoration:none;
+
+    border:none;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.table-action-btn.edit-btn{
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+
+}
+
+.table-action-btn.edit-btn:hover{
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+
+.table-action-btn.activate-btn{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+.table-action-btn.activate-btn:hover{
+
+    background:#22c55e;
+
+    color:#fff;
+
+}
+
+.table-action-btn.deactivate-btn{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+}
+
+.table-action-btn.deactivate-btn:hover{
+
+    background:#ef4444;
+
+    color:#fff;
+
+}
+
+.table-actions-group{
+
+    display:flex;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+
+}
+
+/* ===========================
+   BACK LINK (edit page)
+=========================== */
+
+.back-to-list-link{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:var(--primary);
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    margin-bottom:20px;
+
+}
+
+.back-to-list-link:hover{
+
+    text-decoration:underline;
+
+}

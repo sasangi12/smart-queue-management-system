@@ -1,0 +1,1766 @@
+/* ===========================================================
+   SMART QUEUE MANAGEMENT SYSTEM
+   DOCTOR DASHBOARD
+   (Same design system as patientDashboard.css, kept as its
+   own file so the Doctor and Patient modules stay decoupled)
+=========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    background:#f5f8fc;
+
+    overflow-x:hidden;
+
+    color:#1e293b;
+
+}
+
+/* ===========================================================
+   VARIABLES
+=========================================================== */
+
+:root{
+
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --primary-light:#dbeafe;
+
+    --white:#ffffff;
+
+    --background:#f5f8fc;
+
+    --text:#1e293b;
+
+    --gray:#64748b;
+
+    --border:#e2e8f0;
+
+    --success:#10b981;
+
+    --danger:#ef4444;
+
+    --warning:#f59e0b;
+
+    --shadow:
+
+        0 10px 35px rgba(0,0,0,.08);
+
+}
+
+/* ===========================================================
+   SIDEBAR
+=========================================================== */
+
+.sidebar{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:270px;
+
+    height:100vh;
+
+    background:#ffffff;
+
+    box-shadow:var(--shadow);
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    z-index:999;
+
+    overflow-y:auto;
+
+}
+
+/* ===========================================================
+   LOGO
+=========================================================== */
+
+.sidebar-logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:25px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.logo-icon{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:15px;
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:24px;
+
+}
+
+.logo-text h4{
+
+    margin:0;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#1e293b;
+
+}
+
+.logo-text span{
+
+    color:#64748b;
+
+    font-size:13px;
+
+}
+
+/* ===========================================================
+   PROFILE (SIDEBAR)
+=========================================================== */
+
+.patient-profile{
+
+    text-align:center;
+
+    padding:30px 20px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.patient-profile img{
+
+    width:90px;
+
+    height:90px;
+
+    border-radius:50%;
+
+    border:4px solid #dbeafe;
+
+    object-fit:cover;
+
+}
+
+.patient-profile h5{
+
+    margin-top:15px;
+
+    margin-bottom:5px;
+
+    font-weight:700;
+
+    color:#1e293b;
+
+}
+
+.patient-profile p{
+
+    color:#64748b;
+
+    font-size:14px;
+
+}
+
+/* ===========================================================
+   SIDEBAR MENU
+=========================================================== */
+
+.sidebar-menu{
+
+    list-style:none;
+
+    padding:20px 15px;
+
+}
+
+.sidebar-menu li{
+
+    margin-bottom:10px;
+
+}
+
+.sidebar-menu li a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:15px 18px;
+
+    border-radius:12px;
+
+    color:#475569;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+    font-weight:500;
+
+}
+
+.sidebar-menu li a i{
+
+    font-size:20px;
+
+    width:25px;
+
+}
+
+.sidebar-menu li a:hover{
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+    transform:translateX(6px);
+
+}
+
+.sidebar-menu li a.active{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:white;
+
+}
+
+.sidebar-menu li a.active i{
+
+    color:white;
+
+}
+
+/* ===========================================================
+   SIDEBAR FOOTER
+=========================================================== */
+
+.sidebar-footer{
+
+    padding:25px;
+
+    border-top:1px solid var(--border);
+
+}
+
+.sidebar-footer a{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    background:#ef4444;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.sidebar-footer a:hover{
+
+    background:#dc2626;
+
+    transform:translateY(-2px);
+
+}
+
+/* ===========================================================
+   MAIN CONTENT
+=========================================================== */
+
+.main-content{
+
+    margin-left:270px;
+
+    min-height:100vh;
+
+    background:#f5f8fc;
+
+}
+
+/* ===========================================================
+   COMMON SECTION TITLE
+=========================================================== */
+
+.section-title{
+
+    font-size:26px;
+
+    font-weight:700;
+
+    color:#1e293b;
+
+    margin-bottom:25px;
+
+}
+
+.section-subtitle{
+
+    color:#64748b;
+
+    font-size:15px;
+
+}
+
+
+/* ===========================================================
+   TOP NAVBAR
+=========================================================== */
+
+.top-navbar{
+
+    height:85px;
+
+    background:#ffffff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 35px;
+
+    border-bottom:1px solid var(--border);
+
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+}
+
+/* ===========================================================
+   NAVBAR LEFT
+=========================================================== */
+
+.navbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.navbar-left h3{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.navbar-left p{
+
+    margin:0;
+
+    color:var(--gray);
+
+    font-size:14px;
+
+}
+
+/* ===========================================================
+   MENU TOGGLE
+=========================================================== */
+
+.menu-toggle{
+
+    width:45px;
+
+    height:45px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.menu-toggle:hover{
+
+    background:var(--primary);
+
+    color:#ffffff;
+
+}
+
+/* ===========================================================
+   NAVBAR RIGHT
+=========================================================== */
+
+.navbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+
+    margin-left:auto;
+
+}
+
+/* ===========================================================
+   CURRENT DATE
+=========================================================== */
+
+.current-date{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:var(--gray);
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+.current-date i{
+
+    color:var(--primary);
+
+    font-size:18px;
+
+}
+
+/* ===========================================================
+   NOTIFICATION
+=========================================================== */
+
+.notification{
+
+    position:relative;
+
+}
+
+.notification a{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:50%;
+
+    background:#f1f5f9;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-decoration:none;
+
+    color:var(--text);
+
+    position:relative;
+
+    transition:.3s;
+
+}
+
+.notification a:hover{
+
+    background:var(--primary);
+
+    color:#ffffff;
+
+}
+
+.notification i{
+
+    font-size:22px;
+
+}
+
+/* ===========================================================
+   NOTIFICATION COUNT
+=========================================================== */
+
+.notification-count{
+
+    position:absolute;
+
+    top:-5px;
+
+    right:-5px;
+
+    width:22px;
+
+    height:22px;
+
+    border-radius:50%;
+
+    background:#ef4444;
+
+    color:#ffffff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+/* ===========================================================
+   PROFILE (NAVBAR)
+=========================================================== */
+
+.profile-dropdown{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    position:relative;
+
+}
+
+.profile-dropdown img{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:50%;
+
+    border:3px solid var(--primary-light);
+
+    object-fit:cover;
+
+}
+
+.profile-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.profile-info h6{
+
+    margin:0;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.profile-info span{
+
+    font-size:13px;
+
+    color:var(--gray);
+
+}
+
+/* ===========================================================
+   DASHBOARD CONTENT
+=========================================================== */
+
+.dashboard-content{
+
+    padding:35px;
+
+}
+
+/* ===========================================================
+   WELCOME BANNER
+=========================================================== */
+
+.welcome-banner{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:#ffffff;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    margin-bottom:30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:0 15px 35px rgba(37,99,235,.25);
+
+}
+
+.welcome-banner h2{
+
+    margin:0;
+
+    font-size:30px;
+
+    font-weight:700;
+
+}
+
+.welcome-banner p{
+
+    margin-top:10px;
+
+    opacity:.9;
+
+    font-size:15px;
+
+}
+
+.welcome-banner i{
+
+    font-size:90px;
+
+    opacity:.25;
+
+}
+
+/* ===========================================================
+   STATISTICS CARDS
+=========================================================== */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+.stat-card{
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:var(--shadow);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    transition:.35s;
+
+    border-left:5px solid var(--primary);
+
+}
+
+.stat-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 45px rgba(0,0,0,.12);
+
+}
+
+.stat-info h4{
+
+    color:var(--gray);
+
+    font-size:15px;
+
+    margin-bottom:10px;
+
+}
+
+.stat-info h2{
+
+    color:var(--text);
+
+    font-size:32px;
+
+    font-weight:700;
+
+}
+
+.stat-icon{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:18px;
+
+    background:var(--primary-light);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:var(--primary);
+
+    font-size:30px;
+
+}
+
+/* ===========================================================
+   QUICK ACTIONS
+=========================================================== */
+
+.quick-actions{
+
+    margin-top:20px;
+
+}
+
+.quick-actions h3{
+
+    margin-bottom:25px;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.action-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:25px;
+
+}
+
+.action-card{
+
+    background:#ffffff;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    box-shadow:var(--shadow);
+
+    transition:.35s;
+
+    color:var(--text);
+
+}
+
+.action-card:hover{
+
+    transform:translateY(-10px);
+
+    color:var(--primary);
+
+    text-decoration:none;
+
+    box-shadow:0 25px 50px rgba(37,99,235,.18);
+
+}
+
+.action-card i{
+
+    width:80px;
+
+    height:80px;
+
+    border-radius:50%;
+
+    background:var(--primary-light);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin:auto;
+
+    margin-bottom:20px;
+
+    color:var(--primary);
+
+    font-size:34px;
+
+}
+
+.action-card h4{
+
+    margin-bottom:10px;
+
+    font-size:20px;
+
+    font-weight:700;
+
+}
+
+.action-card p{
+
+    color:var(--gray);
+
+    font-size:14px;
+
+    line-height:1.7;
+
+}
+
+/* ===========================================================
+   SECTION HEADER
+=========================================================== */
+
+.section-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+.section-header h3{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.section-header a{
+
+    text-decoration:none;
+
+    color:var(--primary);
+
+    font-weight:600;
+
+}
+
+.section-header a:hover{
+
+    text-decoration:underline;
+
+}
+
+
+/* ===========================================================
+   CONTENT CARDS
+=========================================================== */
+
+.content-card{
+
+    background:#ffffff;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:30px;
+
+}
+
+.content-card h3{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+
+    color:var(--text);
+
+}
+
+/* ===========================================================
+   TABLE
+=========================================================== */
+
+.table-responsive{
+
+    overflow-x:auto;
+
+}
+
+.dashboard-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.dashboard-table thead{
+
+    background:#f8fafc;
+
+}
+
+.dashboard-table th{
+
+    padding:18px;
+
+    text-align:left;
+
+    font-size:14px;
+
+    color:var(--gray);
+
+    border-bottom:2px solid var(--border);
+
+    font-weight:600;
+
+}
+
+.dashboard-table td{
+
+    padding:18px;
+
+    border-bottom:1px solid var(--border);
+
+    font-size:14px;
+
+    color:var(--text);
+
+}
+
+.dashboard-table tbody tr{
+
+    transition:.3s;
+
+}
+
+.dashboard-table tbody tr:hover{
+
+    background:#f8fbff;
+
+}
+
+/* ===========================================================
+   STATUS BADGES
+=========================================================== */
+
+.badge{
+
+    display:inline-block;
+
+    padding:8px 15px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.badge-confirmed{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+.badge-pending{
+
+    background:#fef3c7;
+
+    color:#b45309;
+
+}
+
+.badge-cancelled{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+}
+
+.badge-completed{
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+}
+
+/* ===========================================================
+   PRIORITY CHIP (doctor-side patient list)
+=========================================================== */
+
+.priority-chip{
+
+    display:inline-block;
+
+    margin-left:8px;
+
+    padding:4px 12px;
+
+    border-radius:30px;
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+/* ===========================================================
+   NOTIFICATION PANEL
+=========================================================== */
+
+.notification-panel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.notification-item{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+    padding:18px;
+
+    border-radius:15px;
+
+    background:#f8fafc;
+
+    transition:.3s;
+
+}
+
+.notification-item:hover{
+
+    background:#eef5ff;
+
+}
+
+.notification-icon{
+
+    width:50px;
+
+    height:50px;
+
+    border-radius:50%;
+
+    background:var(--primary-light);
+
+    color:var(--primary);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:22px;
+
+}
+
+.notification-content h5{
+
+    margin:0;
+
+    font-size:16px;
+
+    font-weight:600;
+
+}
+
+.notification-content p{
+
+    margin:6px 0;
+
+    color:var(--gray);
+
+    font-size:14px;
+
+    line-height:1.6;
+
+}
+
+.notification-content small{
+
+    color:#94a3b8;
+
+}
+
+/* ===========================================================
+   EMPTY STATE
+=========================================================== */
+
+.empty-state{
+
+    text-align:center;
+
+    padding:60px 20px;
+
+}
+
+.empty-state i{
+
+    font-size:70px;
+
+    color:#cbd5e1;
+
+    margin-bottom:20px;
+
+}
+
+.empty-state h4{
+
+    color:var(--text);
+
+    margin-bottom:10px;
+
+}
+
+.empty-state p{
+
+    color:var(--gray);
+
+    margin-bottom:20px;
+
+}
+
+/* ===========================================================
+   ACTION BUTTON
+=========================================================== */
+
+.primary-btn{
+
+    display:inline-block;
+
+    padding:14px 30px;
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:#ffffff;
+
+    text-decoration:none;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.primary-btn:hover{
+
+    color:#ffffff;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 30px rgba(37,99,235,.25);
+
+}
+
+a.primary-btn{
+
+    color:#ffffff !important;
+
+}
+
+/* ===========================================================
+   ANIMATIONS
+=========================================================== */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+        transform:translateY(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+@keyframes slideLeft{
+
+    from{
+
+        opacity:0;
+        transform:translateX(-25px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateX(0);
+
+    }
+
+}
+
+@keyframes slideRight{
+
+    from{
+
+        opacity:0;
+        transform:translateX(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateX(0);
+
+    }
+
+}
+
+.sidebar{
+
+    animation:slideLeft .7s ease;
+
+}
+
+.top-navbar{
+
+    animation:slideRight .7s ease;
+
+}
+
+.dashboard-content{
+
+    animation:fadeIn .8s ease;
+
+}
+
+.stat-card,
+.action-card,
+.content-card{
+
+    transition:all .35s ease;
+
+}
+
+/* ===========================================================
+   SCROLLBAR
+=========================================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#eef4fb;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:var(--primary);
+
+    border-radius:30px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:var(--primary-dark);
+
+}
+
+/* ===========================================================
+   RESPONSIVE DESIGN
+=========================================================== */
+
+@media (max-width:1200px){
+
+    .dashboard-content{
+
+        padding:25px;
+
+    }
+
+    .welcome-banner{
+
+        padding:30px;
+
+    }
+
+}
+
+@media (max-width:992px){
+
+    .sidebar{
+
+        width:85px;
+
+    }
+
+    .logo-text,
+    .patient-profile h5,
+    .patient-profile p,
+    .sidebar-menu li a span,
+    .sidebar-footer a span{
+
+        display:none;
+
+    }
+
+    .sidebar-logo{
+
+        justify-content:center;
+
+    }
+
+    .patient-profile{
+
+        padding:20px 10px;
+
+    }
+
+    .patient-profile img{
+
+        width:60px;
+
+        height:60px;
+
+    }
+
+    .sidebar-menu li a{
+
+        justify-content:center;
+
+        padding:16px;
+
+    }
+
+    .sidebar-menu li a i{
+
+        margin:0;
+
+        font-size:22px;
+
+    }
+
+    .sidebar-footer{
+
+        padding:15px;
+
+    }
+
+    .sidebar-footer a{
+
+        justify-content:center;
+
+    }
+
+    .main-content{
+
+        margin-left:85px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .top-navbar{
+
+        flex-wrap:wrap;
+
+        height:auto;
+
+        padding:20px;
+
+        gap:20px;
+
+    }
+
+    .navbar-left{
+
+        width:100%;
+
+    }
+
+    .navbar-right{
+
+        width:100%;
+
+        justify-content:space-between;
+
+    }
+
+    .welcome-banner{
+
+        flex-direction:column;
+
+        text-align:center;
+
+        gap:20px;
+
+    }
+
+    .welcome-banner i{
+
+        font-size:70px;
+
+    }
+
+    .stats-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .action-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .dashboard-content{
+
+        padding:20px;
+
+    }
+
+}
+
+@media (max-width:576px){
+
+    .sidebar{
+
+        transform:translateX(-100%);
+
+        transition:.35s;
+
+    }
+
+    .sidebar.show{
+
+        transform:translateX(0);
+
+    }
+
+    .main-content{
+
+        margin-left:0;
+
+    }
+
+    .top-navbar{
+
+        padding:15px;
+
+    }
+
+    .navbar-left h3{
+
+        font-size:22px;
+
+    }
+
+    .navbar-left p{
+
+        font-size:13px;
+
+    }
+
+    .profile-info{
+
+        display:none;
+
+    }
+
+    .current-date{
+
+        display:none;
+
+    }
+
+    .dashboard-content{
+
+        padding:15px;
+
+    }
+
+    .welcome-banner{
+
+        padding:25px;
+
+    }
+
+    .welcome-banner h2{
+
+        font-size:24px;
+
+    }
+
+    .welcome-banner p{
+
+        font-size:14px;
+
+    }
+
+    .stat-card{
+
+        flex-direction:column;
+
+        text-align:center;
+
+        gap:20px;
+
+    }
+
+    .content-card{
+
+        padding:20px;
+
+    }
+
+    .dashboard-table th,
+    .dashboard-table td{
+
+        padding:12px;
+
+        font-size:13px;
+
+    }
+
+}
+
+@media (max-width:400px){
+
+    .notification{
+
+        display:none;
+
+    }
+
+    .menu-toggle{
+
+        width:42px;
+
+        height:42px;
+
+    }
+
+    .logo-icon{
+
+        width:50px;
+
+        height:50px;
+
+        font-size:20px;
+
+    }
+
+    .stat-info h2{
+
+        font-size:26px;
+
+    }
+
+    .action-card{
+
+        padding:25px 20px;
+
+    }
+
+    .action-card i{
+
+        width:65px;
+
+        height:65px;
+
+        font-size:28px;
+
+    }
+
+}
+
+/* ===========================================================
+   PRINT MODE
+=========================================================== */
+
+@media print{
+
+    .sidebar,
+    .top-navbar,
+    .sidebar-footer,
+    .notification,
+    .menu-toggle{
+
+        display:none !important;
+
+    }
+
+    .main-content{
+
+        margin:0;
+
+    }
+
+    body{
+
+        background:#ffffff;
+
+    }
+
+}
+
+/* ===========================================================
+   FOOTER
+=========================================================== */
+
+.dashboard-footer{
+
+    margin-top:40px;
+
+    padding:20px 30px;
+
+    background:#ffffff;
+
+    border-top:1px solid var(--border);
+
+    border-radius:15px;
+
+}
+
+.dashboard-footer p{
+
+    margin:0;
+
+    color:var(--gray);
+
+    font-size:14px;
+
+}

@@ -1,0 +1,106 @@
+/* =====================================================
+   ADMIN: MANAGE RECEPTIONISTS PAGES
+   Extends adminDashboard.css. Generic table/button classes
+   (.toggle-add-btn, .status-badge, .table-action-btn,
+   .back-to-list-link, .generate-password-btn) are REUSED
+   from /css/adminManageDoctors.css. This file only adds
+   the search bar for this page.
+===================================================== */
+
+.receptionist-search-bar{
+
+    background:#fff;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:25px;
+
+}
+
+.receptionist-search-bar form{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.receptionist-search-bar input{
+
+    flex:1;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:12px 18px;
+
+    font-size:14px;
+
+    font-family:'Poppins',sans-serif;
+
+}
+
+.receptionist-search-bar input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+.receptionist-search-bar button{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:12px 26px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.receptionist-search-bar button:hover{
+
+    background:var(--primary-dark);
+
+}
+
+.receptionist-photo-cell{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.receptionist-photo-cell img{
+
+    width:40px;
+
+    height:40px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    background:var(--primary-light);
+
+}
